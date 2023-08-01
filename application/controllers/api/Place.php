@@ -224,14 +224,376 @@ class Place extends Auth
     // untuk fitur search tempat (fuzzy tsukamoto)
     public function searchplace_get()
     {
+
+        $user_id = $this->getLoggedId();
+        $keyword = $this->get('keyword');
+        // query jarak user saat ini
+        $userLastLocation = $this->db->get_where('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id])->result();
+        $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
+        $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
+
+        $distance_threshold = 300.0;
+
+        // query data place rentang 1 KM terdekat
+        $dataPlace = $this->db->get('tbl_place')->result_array();
+        if ($dataPlace) {
+            $filtered_places = array();
+
+            // jadikan array
+            foreach ($dataPlace as $place) {
+                $lat2 = (float) $place['place_latitude'];
+                $lon2 = (float) $place['place_longitude'];
+
+                $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
+
+                if ($distance <= $distance_threshold) {
+                    $place['jarak'] = $distance;
+                    $filtered_places[] = $place;
+                }
+            }
+            // foreach 
+
+            // kemudian proses fuzzy
+
+            // 1. Fuzzifikasi
+            // TIngkat kapasitas 10 40
+            // tinglat rating 50 100
+            // tingkat ideal
+
+            $dataForyou = array();
+            foreach ($filtered_places as $dataFuzzy) {
+                $nilaiKapasitas = (float)$dataFuzzy['place_car'];
+                $nilaiRating = (float)$dataFuzzy['place_rating'];
+
+                // ini merupakan nilai konstan, nilai pakar fuzzyfikasi
+                $kapasitasRendah = 10;
+                $kapasitasTinggi = 40;
+                $ratingTinggi = 100;
+                $ratingRendah = 50;
+                $nilaiIdeal = 100;
+                $nilaiKurangIdeal = 50;
+
+                // hitung fuzzifikasi
+                $nilaiKapasitasRendah = 0;
+                $nilaiKapasitasTinggi = 0;
+                $nilaiRatingRendah = 0;
+                $nilaiRatingTinggi = 0;
+
+                // nilaiKapasitasRendah
+                if ($nilaiKapasitas >= $kapasitasTinggi) {
+                    $nilaiKapasitasRendah = 0;
+                } else if ($nilaiKapasitas <= $kapasitasRendah) {
+                    $nilaiKapasitasRendah = 1;
+                } else {
+                    $nilaiKapasitasRendah = ($kapasitasTinggi - $nilaiKapasitas) / ($kapasitasTinggi - $kapasitasRendah);
+                }
+                // nilai kapasitas tinggi
+                if ($nilaiKapasitas <= $kapasitasRendah) {
+                    $nilaiKapasitasTinggi = 0;
+                } else if ($nilaiKapasitas >= 40) {
+                    $nilaiKapasitasTinggi = 1;
+                } else {
+                    $nilaiKapasitasTinggi = ($nilaiKapasitas - $kapasitasRendah) / ($kapasitasTinggi - $kapasitasRendah);
+                }
+                // nilai rating rndah
+                if ($nilaiRating >= $ratingTinggi) {
+                    $nilaiRatingRendah = 0;
+                } elseif ($nilaiRating <= $ratingRendah) {
+                    $nilaiRatingRendah = 1;
+                } else {
+                    $nilaiRatingRendah = ($ratingTinggi - $nilaiRating) / ($ratingTinggi - $ratingRendah);
+                }
+
+                // nilai rating tinggi
+                if ($nilaiRating <= $ratingRendah) {
+                    $nilaiRatingTinggi = 0;
+                } else if ($nilaiRating >= $ratingTinggi) {
+                    $nilaiRatingTinggi = 1;
+                } else {
+                    $nilaiRatingTinggi = ($nilaiRating - $ratingRendah) / ($ratingTinggi - $ratingRendah);
+                }
+
+                // 2. inferensiasi
+                // Rules :
+                // kapasitas rendah && rating rendah = kurang ideal
+                // kapasitas rendah && rating tinggi = ideal
+                // kapasitas tinggi && rating rendah = kurang idela
+                // kapasitas tinggi && rating tinggi = ideal
+
+                $r1 = 0;
+                $r2 = 0;
+                $r3 = 0;
+                $r4 = 0;
+                $a1 = min($nilaiKapasitasRendah, $nilaiRatingRendah); // maka kurang ideal
+                $r1 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a1;
+
+                $a2 = min($nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
+                $r2 = $a2 * ($nilaiIdeal - $nilaiKurangIdeal) + $nilaiKurangIdeal;
+
+                $a3 =  min($nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
+                $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
+                $a4 = min($nilaiKapasitasTinggi, $nilaiRatingTinggi);
+                $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
+
+                $totalA = ($a1 * $r1) + ($a2 * $r2) + ($a3 * $r3) + ($a4 * $r4);
+                $totalB = $a1 + $a2 + $a3 + $a4;
+                $finalResult = $totalA / $totalB;
+
+                if ($finalResult <= 50) {
+                    $dataFuzzy['status'] = 'Tidak Disarankan';
+                    $dataFuzzy['nilai'] = $finalResult;
+
+                    $dataForyou[] = $dataFuzzy;
+                } else {
+                    $dataFuzzy['status'] = 'Disarankan untuk Anda';
+                    $dataFuzzy['nilai'] = $finalResult;
+                    $dataForyou[] = $dataFuzzy;
+                }
+            }
+            function searchByKeyword($data, $keyword)
+            {
+                return strpos(strtolower($data['place_name']), strtolower($keyword)) !== false ||
+                    strpos(strtolower($data['place_address']), strtolower($keyword)) !== false;
+            }
+
+            // Gunakan array_filter untuk menyaring data berdasarkan kata kunci
+            $filtered_by_keyword = array_filter($dataForyou, function ($data) use ($keyword) {
+                return searchByKeyword($data, $keyword);
+            });
+            $sorted_places = $this->place->sort_places_by_status_and_jarak($filtered_by_keyword);
+
+            $this->response([
+                'status' => true,
+                'message' => 'Data ditemukan!',
+                'place' => $sorted_places
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'Data tidak ditemukan'
+            ], REST_Controller::HTTP_NO_CONTENT);
+        }
     }
     // untuk fitur get tempat (fuzzy tsukamoto)
     public function getplace_get()
     {
+        $user_id = $this->getLoggedId();
+        // query jarak user saat ini
+        $userLastLocation = $this->db->get_where('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id])->result();
+        $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
+        $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
+
+        $distance_threshold = 1.0;
+
+        // query data place rentang 1 KM terdekat
+        $dataPlace = $this->db->get('tbl_place')->result_array();
+        if ($dataPlace) {
+            $filtered_places = array();
+
+            // jadikan array
+            foreach ($dataPlace as $place) {
+                $lat2 = (float) $place['place_latitude'];
+                $lon2 = (float) $place['place_longitude'];
+
+                $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
+
+                if ($distance <= $distance_threshold) {
+                    $place['jarak'] = $distance;
+                    $filtered_places[] = $place;
+                }
+            }
+            // foreach 
+
+            // kemudian proses fuzzy
+
+            // 1. Fuzzifikasi
+            // TIngkat kapasitas 10 40
+            // tinglat rating 50 100
+            // tingkat ideal
+
+            $dataForyou = array();
+            foreach ($filtered_places as $dataFuzzy) {
+                $nilaiKapasitas = (float)$dataFuzzy['place_car'];
+                $nilaiRating = (float)$dataFuzzy['place_rating'];
+
+                // ini merupakan nilai konstan, nilai pakar fuzzyfikasi
+                $kapasitasRendah = 10;
+                $kapasitasTinggi = 40;
+                $ratingTinggi = 100;
+                $ratingRendah = 50;
+                $nilaiIdeal = 100;
+                $nilaiKurangIdeal = 50;
+
+                // hitung fuzzifikasi
+                $nilaiKapasitasRendah = 0;
+                $nilaiKapasitasTinggi = 0;
+                $nilaiRatingRendah = 0;
+                $nilaiRatingTinggi = 0;
+
+                // nilaiKapasitasRendah
+                if ($nilaiKapasitas >= $kapasitasTinggi) {
+                    $nilaiKapasitasRendah = 0;
+                } else if ($nilaiKapasitas <= $kapasitasRendah) {
+                    $nilaiKapasitasRendah = 1;
+                } else {
+                    $nilaiKapasitasRendah = ($kapasitasTinggi - $nilaiKapasitas) / ($kapasitasTinggi - $kapasitasRendah);
+                }
+                // nilai kapasitas tinggi
+                if ($nilaiKapasitas <= $kapasitasRendah) {
+                    $nilaiKapasitasTinggi = 0;
+                } else if ($nilaiKapasitas >= 40) {
+                    $nilaiKapasitasTinggi = 1;
+                } else {
+                    $nilaiKapasitasTinggi = ($nilaiKapasitas - $kapasitasRendah) / ($kapasitasTinggi - $kapasitasRendah);
+                }
+                // nilai rating rndah
+                if ($nilaiRating >= $ratingTinggi) {
+                    $nilaiRatingRendah = 0;
+                } elseif ($nilaiRating <= $ratingRendah) {
+                    $nilaiRatingRendah = 1;
+                } else {
+                    $nilaiRatingRendah = ($ratingTinggi - $nilaiRating) / ($ratingTinggi - $ratingRendah);
+                }
+
+                // nilai rating tinggi
+                if ($nilaiRating <= $ratingRendah) {
+                    $nilaiRatingTinggi = 0;
+                } else if ($nilaiRating >= $ratingTinggi) {
+                    $nilaiRatingTinggi = 1;
+                } else {
+                    $nilaiRatingTinggi = ($nilaiRating - $ratingRendah) / ($ratingTinggi - $ratingRendah);
+                }
+
+                // 2. inferensiasi
+                // Rules :
+                // kapasitas rendah && rating rendah = kurang ideal
+                // kapasitas rendah && rating tinggi = ideal
+                // kapasitas tinggi && rating rendah = kurang idela
+                // kapasitas tinggi && rating tinggi = ideal
+
+                $r1 = 0;
+                $r2 = 0;
+                $r3 = 0;
+                $r4 = 0;
+                $a1 = min($nilaiKapasitasRendah, $nilaiRatingRendah); // maka kurang ideal
+                $r1 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a1;
+
+                $a2 = min($nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
+                $r2 = $a2 * ($nilaiIdeal - $nilaiKurangIdeal) + $nilaiKurangIdeal;
+
+                $a3 =  min($nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
+                $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
+                $a4 = min($nilaiKapasitasTinggi, $nilaiRatingTinggi);
+                $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
+
+                $totalA = ($a1 * $r1) + ($a2 * $r2) + ($a3 * $r3) + ($a4 * $r4);
+                $totalB = $a1 + $a2 + $a3 + $a4;
+                $finalResult = $totalA / $totalB;
+
+                if ($finalResult <= 50) {
+                    $dataFuzzy['status'] = 'Tidak Disarankan';
+                    $dataFuzzy['nilai'] = $finalResult;
+
+                    $dataForyou[] = $dataFuzzy;
+                } else {
+                    $dataFuzzy['status'] = 'Disarankan untuk Anda';
+                    $dataFuzzy['nilai'] = $finalResult;
+                    $dataForyou[] = $dataFuzzy;
+                }
+            }
+            $sorted_places = $this->place->sort_places_by_status_and_jarak($dataForyou);
+
+            $this->response([
+                'status' => true,
+                'message' => 'Data ditemukan!',
+                'place' => $sorted_places
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'Data tidak ditemukan'
+            ], REST_Controller::HTTP_NO_CONTENT);
+        }
     }
     // untuk fitur get tempat berdasarkan like (fuzzy tsukamoto)
     public function getplacebylike_get()
     {
+        $user_id = $this->getLoggedId();
+        // query jarak user saat ini
+        $userLastLocation = $this->db->get_where('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id])->result();
+        $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
+        $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
+
+        $distance_threshold = 1.0;
+
+        // query data place rentang 1 KM terdekat
+        $dataPlace = $this->db->get('tbl_place')->result_array();
+        if ($dataPlace) {
+            $filtered_places = array();
+            // jadikan array
+            foreach ($dataPlace as $place) {
+                $lat2 = (float) $place['place_latitude'];
+                $lon2 = (float) $place['place_longitude'];
+
+                $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
+
+                if ($distance <= $distance_threshold) {
+                    $place['jarak'] = $distance;
+                    $filtered_places[] = $place;
+                }
+            }
+            $sorted_places = $this->place->sort_places_by_like($filtered_places);
+            $this->response([
+                'status' => true,
+                'message' => 'Data ditemukan!',
+                'place' => $sorted_places
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'Data tidak ditemukan'
+            ], REST_Controller::HTTP_NO_CONTENT);
+        }
+    }
+    // untuk fitur get tempat berdasarkan like (fuzzy tsukamoto)
+    public function getplacebydistance_get()
+    {
+        $user_id = $this->getLoggedId();
+        // query jarak user saat ini
+        $userLastLocation = $this->db->get_where('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id])->result();
+        $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
+        $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
+
+        $distance_threshold = 1.0;
+
+        // query data place rentang 1 KM terdekat
+        $dataPlace = $this->db->get('tbl_place')->result_array();
+        if ($dataPlace) {
+            $filtered_places = array();
+            // jadikan array
+            foreach ($dataPlace as $place) {
+                $lat2 = (float) $place['place_latitude'];
+                $lon2 = (float) $place['place_longitude'];
+
+                $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
+
+                if ($distance <= $distance_threshold) {
+                    $place['jarak'] = $distance;
+                    $filtered_places[] = $place;
+                }
+            }
+            $sorted_places = $this->place->sort_places_by_distance($filtered_places);
+            $this->response([
+                'status' => true,
+                'message' => 'Data ditemukan!',
+                'place' => $sorted_places
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'Data tidak ditemukan'
+            ], REST_Controller::HTTP_NO_CONTENT);
+        }
     }
     // untuk fitur add like/review
     public function addlike_post()
@@ -288,6 +650,38 @@ class Place extends Auth
             $this->response([
                 'status' => false,
                 'message' => 'Data not found!'
+            ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function getLastLoc_post()
+    {
+        $user_id = $this->getLoggedId();
+
+        $lastLongitude = $this->post('last_longitude');
+        $lastLatitude = $this->post('last_latitude');
+
+        $querydata = $this->db->get_where('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id])->num_rows();
+        if ($querydata > 0) {
+            $this->db->update('tbl_user_lastlocation', ['lastlocation_longitude' => $lastLongitude, 'lastlocation_latitude' => $lastLatitude], ['lastlocation_user_id' => $user_id]);
+        } else {
+            $this->db->insert('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id, 'lastlocation_longitude' => $lastLongitude, 'lastlocation_latitude' => $lastLatitude]);
+        }
+
+        $insertData = $this->db->affected_rows();
+        if ($insertData > 0) {
+            $this->response([
+                'status' => true,
+                'message' => 'Success! Place is edited!',
+                'location' => [
+                    'longitude' => $lastLongitude,
+                    'latitude' => $lastLatitude
+                ]
+            ], REST_Controller::HTTP_CREATED);
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'Failed to insert last location'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
