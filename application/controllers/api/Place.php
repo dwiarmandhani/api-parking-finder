@@ -262,6 +262,7 @@ class Place extends Auth
 
             $dataForyou = array();
             foreach ($filtered_places as $dataFuzzy) {
+                $image = json_decode($dataFuzzy);
                 $nilaiKapasitas = (float)$dataFuzzy['place_car'];
                 $nilaiRating = (float)$dataFuzzy['place_rating'];
 
@@ -340,11 +341,13 @@ class Place extends Auth
                 $finalResult = $totalA / $totalB;
 
                 if ($finalResult <= 50) {
+                    $dataFuzzy['place_image'] = $image;
                     $dataFuzzy['status'] = 'Tidak Disarankan';
                     $dataFuzzy['nilai'] = $finalResult;
 
                     $dataForyou[] = $dataFuzzy;
                 } else {
+                    $dataFuzzy['place_image'] = $image;
                     $dataFuzzy['status'] = 'Disarankan untuk Anda';
                     $dataFuzzy['nilai'] = $finalResult;
                     $dataForyou[] = $dataFuzzy;
@@ -413,6 +416,7 @@ class Place extends Auth
 
             $dataForyou = array();
             foreach ($filtered_places as $dataFuzzy) {
+                $place_image = json_decode($dataFuzzy['place_image']);
                 $nilaiKapasitas = (float)$dataFuzzy['place_car'];
                 $nilaiRating = (float)$dataFuzzy['place_rating'];
 
@@ -491,11 +495,13 @@ class Place extends Auth
                 $finalResult = $totalA / $totalB;
 
                 if ($finalResult <= 50) {
+                    $dataFuzzy['place_image'] = $place_image;
                     $dataFuzzy['status'] = 'Tidak Disarankan';
                     $dataFuzzy['nilai'] = $finalResult;
 
                     $dataForyou[] = $dataFuzzy;
                 } else {
+                    $dataFuzzy['place_image'] = $place_image;
                     $dataFuzzy['status'] = 'Disarankan untuk Anda';
                     $dataFuzzy['nilai'] = $finalResult;
                     $dataForyou[] = $dataFuzzy;
@@ -532,6 +538,7 @@ class Place extends Auth
             $filtered_places = array();
             // jadikan array
             foreach ($dataPlace as $place) {
+                $place_image = json_decode($place['place_image']);
                 $lat2 = (float) $place['place_latitude'];
                 $lon2 = (float) $place['place_longitude'];
 
@@ -539,6 +546,7 @@ class Place extends Auth
 
                 if ($distance <= $distance_threshold) {
                     $place['jarak'] = $distance;
+                    $place['place_image'] = $place_image;
                     $filtered_places[] = $place;
                 }
             }
@@ -572,6 +580,7 @@ class Place extends Auth
             $filtered_places = array();
             // jadikan array
             foreach ($dataPlace as $place) {
+                $place_image = json_decode($place['place_image']);
                 $lat2 = (float) $place['place_latitude'];
                 $lon2 = (float) $place['place_longitude'];
 
@@ -579,6 +588,7 @@ class Place extends Auth
 
                 if ($distance <= $distance_threshold) {
                     $place['jarak'] = $distance;
+                    $place['place_image'] = $place_image;
                     $filtered_places[] = $place;
                 }
             }
