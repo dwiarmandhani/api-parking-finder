@@ -48,6 +48,12 @@ class Auth extends REST_Controller
 
     public function register_post()
     {
+        if ($this->post('user_name') === "" || $this->post('user_name') === null) {
+            $this->response([
+                'status' => false,
+                'message' => 'Masukan username dengan benar!'
+            ], REST_Controller::HTTP_NOT_FOUND);
+        }
         $data = [
             'user_name' => $this->post('user_name'),
             'user_phone' => $this->post('user_phone'),
@@ -88,10 +94,21 @@ class Auth extends REST_Controller
     }
     public function login_post()
     {
-
         $date = new DateTime();
         $email = $this->post('user_email');
         $password = $this->post('user_password');
+        if ($email === "" || $email === null) {
+            $this->response([
+                'status' => false,
+                'message' => 'Email tidak boleh kosong'
+            ], REST_Controller::HTTP_FORBIDDEN);
+        }
+        if ($password === "" || $password === null) {
+            $this->response([
+                'status' => false,
+                'message' => 'Password tidak boleh kosong'
+            ], REST_Controller::HTTP_FORBIDDEN);
+        }
         $encryptedPassword = hash('sha512', $password . $this->key);
 
         $datauser = $this->auth->loginuser($email, $encryptedPassword);
