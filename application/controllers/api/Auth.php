@@ -120,10 +120,17 @@ class Auth extends REST_Controller
                 'iat' => $date->getTimestamp(),
                 'exp' => $date->getTimestamp() + (3600 * 24) // token 1 hari
             ];
+            $admin = false;
+            if ((int)$datauser[0]->user_is_admin === 1) {
+                $admin = true;
+            } elseif ((int) $datauser[0]->user_is_admin === 0) {
+                $admin = false;
+            }
             $userInfo = [
                 'user_id' => $datauser[0]->user_id,
                 'name' => $datauser[0]->user_name,
-                'email' => $datauser[0]->user_email
+                'email' => $datauser[0]->user_email,
+                'admin' => $admin
             ];
 
             $token = JWT::encode($payload, $this->key, 'HS256');

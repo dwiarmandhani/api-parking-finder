@@ -649,12 +649,17 @@ class Place extends Auth
         $user_id = $this->getLoggedId();
 
         $data = $this->place->getPlaceByUser($user_id);
+        $dataFinal = array();
+        foreach ($data as $place) {
+            $place['place_image'] = json_decode($place['place_image']);
+            $dataFinal[] = $place;
+        }
 
         if ($data) {
             $this->response([
                 'status' => true,
                 'message' => 'Success',
-                'place' => $data
+                'place' => $dataFinal
             ], REST_Controller::HTTP_OK);
         } else {
             $this->response([
