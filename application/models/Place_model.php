@@ -35,6 +35,10 @@ class Place_model extends CI_Model
     {
         return $this->db->get_where('tbl_place', ['place_user_id' => $user_id])->result_array();
     }
+    public function getPlaceByUserAdmin()
+    {
+        return $this->db->get('tbl_place')->result_array();
+    }
 
     public function haversineDistance($lat1, $lon1, $lat2, $lon2)
     {

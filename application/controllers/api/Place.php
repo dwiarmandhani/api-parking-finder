@@ -146,18 +146,18 @@ class Place extends Auth
         }
     }
     // untuk fitur edit temmpat
-    public function editplace_put()
+    public function editplace_post()
     {
-        $id = $this->put('place_id');
-        $locationName = $this->put('place_name');
-        $locationAddress = $this->put('place_address');
-        $longitude = $this->put('place_longitude');
-        $latitude = $this->put('place_latidute');
-        $car = $this->put('place_car');
-        $moto = $this->put('place_motor');
-        $pic = $this->put('place_pic');
-        $picContact = $this->put('place_pic_contact');
-        $facilityDesc = $this->put('place_desc');
+        $id = $this->post('place_id');
+        $locationName = $this->post('place_name');
+        $locationAddress = $this->post('place_address');
+        $longitude = $this->post('place_longitude');
+        $latitude = $this->post('place_latidute');
+        $car = $this->post('place_car');
+        $moto = $this->post('place_motor');
+        $pic = $this->post('place_pic');
+        $picContact = $this->post('place_pic_contact');
+        $facilityDesc = $this->post('place_desc');
 
         $user_id = $this->getLoggedId();
 
@@ -196,9 +196,9 @@ class Place extends Auth
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
     }
-    public function deleteplace_delete()
+    public function deleteplace_post()
     {
-        $id = $this->delete('place_id');
+        $id = $this->post('place_id');
         if ($id === null) {
             $this->response([
                 'status' => false,
@@ -224,7 +224,6 @@ class Place extends Auth
     // untuk fitur search tempat (fuzzy tsukamoto)
     public function searchplace_get()
     {
-
         $user_id = $this->getLoggedId();
         $keyword = $this->get('keyword');
         // query jarak user saat ini
@@ -383,11 +382,16 @@ class Place extends Auth
         $user_id = $this->getLoggedId();
         // query jarak user saat ini
         $userLastLocation = $this->db->get_where('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id])->result();
-        $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
-        $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
 
+        if (!$userLastLocation) {
+            $latitude_last = 0;
+            $longitude_last = 0;
+        } else {
+            $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
+            $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
+        }
+        $like = false;
         $distance_threshold = 1.0;
-
         // query data place rentang 1 KM terdekat
         $dataPlace = $this->db->get('tbl_place')->result_array();
         if ($dataPlace) {
@@ -395,12 +399,22 @@ class Place extends Auth
 
             // jadikan array
             foreach ($dataPlace as $place) {
+                /** cek like */
+                $dataLike = $this->db->get_where('tbl_ratings', ['rating_user_id' => $user_id, 'rating_place_id' => $place['place_id']])->result();
+                if ($dataLike) {
+                    $like = true;
+                } else {
+                    $like = false;
+                }
+                // die;
+                /** EOF cek like */
                 $lat2 = (float) $place['place_latitude'];
                 $lon2 = (float) $place['place_longitude'];
 
                 $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
 
                 if ($distance <= $distance_threshold) {
+                    $place['isRated'] = $like;
                     $place['jarak'] = $distance;
                     $filtered_places[] = $place;
                 }
@@ -495,6 +509,7 @@ class Place extends Auth
                 $finalResult = $totalA / $totalB;
 
                 if ($finalResult <= 50) {
+                    $dataFuzzy['like'] = $like;
                     $dataFuzzy['place_image'] = $place_image;
                     $dataFuzzy['status'] = 'Tidak Disarankan';
                     $dataFuzzy['nilai'] = $finalResult;
@@ -527,9 +542,14 @@ class Place extends Auth
         $user_id = $this->getLoggedId();
         // query jarak user saat ini
         $userLastLocation = $this->db->get_where('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id])->result();
-        $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
-        $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
-
+        if (!$userLastLocation) {
+            $latitude_last = 0;
+            $longitude_last = 0;
+        } else {
+            $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
+            $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
+        }
+        $like = false;
         $distance_threshold = 1.0;
 
         // query data place rentang 1 KM terdekat
@@ -538,6 +558,12 @@ class Place extends Auth
             $filtered_places = array();
             // jadikan array
             foreach ($dataPlace as $place) {
+                $dataLike = $this->db->get_where('tbl_ratings', ['rating_user_id' => $user_id, 'rating_place_id' => $place['place_id']])->result();
+                if ($dataLike) {
+                    $like = true;
+                } else {
+                    $like = false;
+                }
                 $place_image = json_decode($place['place_image']);
                 $lat2 = (float) $place['place_latitude'];
                 $lon2 = (float) $place['place_longitude'];
@@ -545,6 +571,7 @@ class Place extends Auth
                 $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
 
                 if ($distance <= $distance_threshold) {
+                    $place['isRated'] = $like;
                     $place['jarak'] = $distance;
                     $place['place_image'] = $place_image;
                     $filtered_places[] = $place;
@@ -569,9 +596,14 @@ class Place extends Auth
         $user_id = $this->getLoggedId();
         // query jarak user saat ini
         $userLastLocation = $this->db->get_where('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id])->result();
-        $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
-        $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
-
+        if (!$userLastLocation) {
+            $latitude_last = 0;
+            $longitude_last = 0;
+        } else {
+            $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
+            $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
+        }
+        $like = false;
         $distance_threshold = 1.0;
 
         // query data place rentang 1 KM terdekat
@@ -580,6 +612,12 @@ class Place extends Auth
             $filtered_places = array();
             // jadikan array
             foreach ($dataPlace as $place) {
+                $dataLike = $this->db->get_where('tbl_ratings', ['rating_user_id' => $user_id, 'rating_place_id' => $place['place_id']])->result();
+                if ($dataLike) {
+                    $like = true;
+                } else {
+                    $like = false;
+                }
                 $place_image = json_decode($place['place_image']);
                 $lat2 = (float) $place['place_latitude'];
                 $lon2 = (float) $place['place_longitude'];
@@ -587,6 +625,7 @@ class Place extends Auth
                 $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
 
                 if ($distance <= $distance_threshold) {
+                    $place['isRated'] = $like;
                     $place['jarak'] = $distance;
                     $place['place_image'] = $place_image;
                     $filtered_places[] = $place;
@@ -642,6 +681,39 @@ class Place extends Auth
                 'status' => false,
                 'message' => 'You`ve Already like this place!'
             ], REST_Controller::HTTP_BAD_REQUEST);
+        }
+    }
+    public function getplacebyuseradmin_get()
+    {
+        $user_id = $this->getLoggedId();
+
+        $isAdmin = $this->userdata->isAdmin($this->getEmail());
+
+        if ($isAdmin > 0) {
+            $data = $this->place->getPlaceByUserAdmin();
+            $dataFinal = array();
+            foreach ($data as $place) {
+                $place['place_image'] = json_decode($place['place_image']);
+                $dataFinal[] = $place;
+            }
+
+            if ($data) {
+                $this->response([
+                    'status' => true,
+                    'message' => 'Success',
+                    'place' => $dataFinal
+                ], REST_Controller::HTTP_OK);
+            } else {
+                $this->response([
+                    'status' => false,
+                    'message' => 'Data not found!'
+                ], REST_Controller::HTTP_BAD_REQUEST);
+            }
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'Access not Allowed'
+            ], REST_Controller::HTTP_FORBIDDEN);
         }
     }
     public function getplacebyuser_get()

@@ -38,17 +38,17 @@ class Users extends Auth
         }
     }
     // untuk fitur edit users di admin
-    public function editusersadmin_put()
+    public function editusersadmin_post()
     {
         $this->getLoggedId();
 
         $isAdmin = $this->userdata->isAdmin($this->getEmail());
 
         if ($isAdmin > 0) {
-            $user_id = $this->put('user_id');
+            $user_id = $this->post('user_id');
             $data = [
-                'user_name' => $this->put('user_name'),
-                'user_phone' => $this->put('user_phone'),
+                'user_name' => $this->post('user_name'),
+                'user_phone' => $this->post('user_phone'),
             ];
 
             $updateUser = $this->userdata->editUsers($user_id, $data);
@@ -71,14 +71,14 @@ class Users extends Auth
             ], REST_Controller::HTTP_FORBIDDEN);
         }
     }
-    public function editusers_put()
+    public function editusers_post()
     {
         $this->getLoggedId();
 
-        $user_id = $this->put('user_id');
+        $user_id = $this->post('user_id');
         $data = [
-            'user_name' => $this->put('user_name'),
-            'user_phone' => $this->put('user_phone'),
+            'user_name' => $this->post('user_name'),
+            'user_phone' => $this->post('user_phone'),
         ];
 
         $updateUser = $this->userdata->editUsers($user_id, $data);
@@ -96,20 +96,20 @@ class Users extends Auth
         }
     }
     // untuk fitur changes password users
-    public function changespasswords_put()
+    public function changespasswords_post()
     {
         $user_id = $this->getLoggedId();
         $key = '1234567890';
 
-        if ($this->put('password') === '' || $this->put('confirm_password') === '') {
+        if ($this->post('password') === '' || $this->post('confirm_password') === '') {
             $this->response([
                 'status' => false,
                 'message' => 'Failed to changed password! Field can`t be null'
             ], REST_Controller::HTTP_BAD_REQUEST);
         }
 
-        $password = hash('sha512', $this->put('password') . $key);
-        $confirmpassword = hash('sha512', $this->put('confirm_password') . $key);
+        $password = hash('sha512', $this->post('password') . $key);
+        $confirmpassword = hash('sha512', $this->post('confirm_password') . $key);
 
         if ($password === $confirmpassword) {
             $this->db->update('tbl_users', ['user_password' => $password], ['user_id' => $user_id]);
