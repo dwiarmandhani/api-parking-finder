@@ -571,7 +571,7 @@ class Place extends Auth
 
                 if ($distance <= $distance_threshold) {
                     $place['isRated'] = $like;
-                    $place['jarak'] = $distance;
+                    $place['jarak'] = round($distance, 2);
                     $place['place_image'] = $place_image;
                     $filtered_places[] = $place;
                 }
@@ -625,7 +625,7 @@ class Place extends Auth
 
                 if ($distance <= $distance_threshold) {
                     $place['isRated'] = $like;
-                    $place['jarak'] = $distance;
+                    $place['jarak'] = round($distance, 2);
                     $place['place_image'] = $place_image;
                     $filtered_places[] = $place;
                 }
