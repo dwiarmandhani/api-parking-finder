@@ -509,7 +509,6 @@ class Place extends Auth
                 $finalResult = $totalA / $totalB;
 
                 if ($finalResult <= 50) {
-                    $dataFuzzy['like'] = $like;
                     $dataFuzzy['place_image'] = $place_image;
                     $dataFuzzy['status'] = 'Tidak Disarankan';
                     $dataFuzzy['nilai'] = $finalResult;
