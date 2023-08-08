@@ -261,7 +261,7 @@ class Place extends Auth
 
             $dataForyou = array();
             foreach ($filtered_places as $dataFuzzy) {
-                $image = json_decode($dataFuzzy);
+                $image = json_decode($dataFuzzy['place_image']);
                 $nilaiKapasitas = (float)$dataFuzzy['place_car'];
                 $nilaiRating = (float)$dataFuzzy['place_rating'];
 
