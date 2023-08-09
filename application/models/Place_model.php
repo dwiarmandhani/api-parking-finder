@@ -84,7 +84,7 @@ class Place_model extends CI_Model
     {
         function compareByDistance($place1, $place2)
         {
-            return $place2['jarak'] <=> $place1['jarak'];
+            return $place1['jarak'] <=> $place2['jarak'];
         }
 
         usort($dataForyou, 'compareByDistance');
