@@ -606,8 +606,17 @@ class Place extends Auth
             $dataForyou = array();
             foreach ($filtered_places as $dataFuzzy) {
                 $place_image = json_decode($dataFuzzy['place_image']);
-                $nilaiKapasitas = (float)$dataFuzzy['place_car'];
-                $nilaiRating = (float)$dataFuzzy['place_rating'];
+                if ($dataFuzzy['place_car'] === "") {
+                    $nilaiKapasitas = 0;
+                } else {
+                    $nilaiKapasitas = (float)$dataFuzzy['place_car'];
+                }
+
+                if ($dataFuzzy['place_rating'] === "") {
+                    $nilaiRating = 0;
+                } else {
+                    $nilaiRating = (float)$dataFuzzy['place_rating'];
+                }
 
                 // ini merupakan nilai konstan, nilai pakar fuzzyfikasi
                 // $kapasitasRendah = 10;
