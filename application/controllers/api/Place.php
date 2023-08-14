@@ -577,47 +577,47 @@ class Place extends Auth
             // TIngkat kapasitas 10 40
             // tinglat rating 50 100
             // tingkat ideal
-            $lowestRating = PHP_INT_MAX;
-            $highestRating = PHP_INT_MIN;
+            // $lowestRating = PHP_INT_MAX;
+            // $highestRating = PHP_INT_MIN;
             // $lowestPlace = PHP_INT_MAX;
             // $highestPlace = PHP_INT_MIN;
 
-            foreach ($filtered_places as $data) {
-                $rating = (int)$data["place_rating"];
-                // $place = (int)$data["place_car"];
+            // foreach ($filtered_places as $data) {
+            //     $rating = (int)$data["place_rating"];
+            //     // $place = (int)$data["place_car"];
 
-                if ($rating < $lowestRating) {
-                    if ($rating === 0) {
-                        $lowestRating = 50;
-                    } else {
-                        $lowestRating = $rating;
-                    }
-                }
+            //     if ($rating < $lowestRating) {
+            //         if ($rating === 0) {
+            //             $lowestRating = 50;
+            //         } else {
+            //             $lowestRating = $rating;
+            //         }
+            //     }
 
-                if ($rating > $highestRating) {
-                    if ($rating === 0) {
-                        $highestRating = 100;
-                    } else {
-                        $highestRating = $rating;
-                    }
-                }
+            //     if ($rating > $highestRating) {
+            //         if ($rating === 0) {
+            //             $highestRating = 100;
+            //         } else {
+            //             $highestRating = $rating;
+            //         }
+            //     }
 
-                // if ($place < $lowestPlace) {
-                //     if ($place === 0) {
-                //         $lowestPlace = 10;
-                //     } else {
-                //         $lowestPlace = $place;
-                //     }
-                // }
+            //     if ($place < $lowestPlace) {
+            //         if ($place === 0) {
+            //             $lowestPlace = 10;
+            //         } else {
+            //             $lowestPlace = $place;
+            //         }
+            //     }
 
-                // if ($place > $highestPlace) {
-                //     if ($place === 0) {
-                //         $highestPlace = 40;
-                //     } else {
-                //         $highestPlace = $place;
-                //     }
-                // }
-            }
+            //     if ($place > $highestPlace) {
+            //         if ($place === 0) {
+            //             $highestPlace = 40;
+            //         } else {
+            //             $highestPlace = $place;
+            //         }
+            //     }
+            // }
 
             $dataForyou = array();
             foreach ($filtered_places as $dataFuzzy) {
@@ -628,12 +628,12 @@ class Place extends Auth
                 // ini merupakan nilai konstan, nilai pakar fuzzyfikasi
                 $kapasitasRendah = 10;
                 $kapasitasTinggi = 40;
-                // $ratingTinggi = 100;
-                // $ratingRendah = 50;
+                $ratingTinggi = 100;
+                $ratingRendah = 50;
                 // $kapasitasRendah = $lowestPlace;
                 // $kapasitasTinggi = $highestPlace;
-                $ratingTinggi = $highestRating;
-                $ratingRendah = $lowestRating;
+                // $ratingTinggi = $highestRating;
+                // $ratingRendah = $lowestRating;
 
                 // hitung fuzzifikasi
                 $nilaiKapasitasRendah = 0;
