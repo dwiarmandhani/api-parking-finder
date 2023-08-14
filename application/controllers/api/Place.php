@@ -577,65 +577,63 @@ class Place extends Auth
             // TIngkat kapasitas 10 40
             // tinglat rating 50 100
             // tingkat ideal
-            $lowestPlaceCar = PHP_INT_MAX;
-            $highestPlaceCar = 0;
+            $lowestRating = PHP_INT_MAX;
+            $highestRating = PHP_INT_MIN;
+            // $lowestPlace = PHP_INT_MAX;
+            // $highestPlace = PHP_INT_MIN;
 
-            $lowestPlaceRating = PHP_FLOAT_MAX;
-            $highestPlaceRating = 0;
+            foreach ($filtered_places as $data) {
+                $rating = (int)$data["place_rating"];
+                // $place = (int)$data["place_car"];
 
-            foreach ($filtered_places as $entry) {
-                if ($entry['place_car'] === "") {
-                    $placeCar = 0; // Mengonversi ke integer
-                } else {
-                    $placeCar = intval($entry['place_car']); // Mengonversi ke integer
+                if ($rating < $lowestRating) {
+                    if ($rating === 0) {
+                        $lowestRating = 50;
+                    } else {
+                        $lowestRating = $rating;
+                    }
                 }
 
-                if ($entry['place_rating'] === "") {
-                    $placeRate = 0; // Mengonversi ke integer
-                } else {
-                    $placeRate = intval($entry['place_rating']); // Mengonversi ke integer
+                if ($rating > $highestRating) {
+                    if ($rating === 0) {
+                        $highestRating = 100;
+                    } else {
+                        $highestRating = $rating;
+                    }
                 }
 
-                if ($placeCar < $lowestPlaceCar) {
-                    $lowestPlaceCar = $placeCar;
-                }
+                // if ($place < $lowestPlace) {
+                //     if ($place === 0) {
+                //         $lowestPlace = 10;
+                //     } else {
+                //         $lowestPlace = $place;
+                //     }
+                // }
 
-                if ($placeCar > $highestPlaceCar) {
-                    $highestPlaceCar = $placeCar;
-                }
-                if ($placeRate < $lowestPlaceRating) {
-                    $lowestPlaceRating = $placeRate;
-                }
-
-                if ($placeRate > $highestPlaceRating) {
-                    $highestPlaceRating = $placeRate;
-                }
+                // if ($place > $highestPlace) {
+                //     if ($place === 0) {
+                //         $highestPlace = 40;
+                //     } else {
+                //         $highestPlace = $place;
+                //     }
+                // }
             }
 
             $dataForyou = array();
             foreach ($filtered_places as $dataFuzzy) {
                 $place_image = json_decode($dataFuzzy['place_image']);
-                if ($dataFuzzy['place_car'] === "") {
-                    $nilaiKapasitas = 0;
-                } else {
-                    $nilaiKapasitas = (float)$dataFuzzy['place_car'];
-                }
-
-                if ($dataFuzzy['place_rating'] === "") {
-                    $nilaiRating = 0;
-                } else {
-                    $nilaiRating = (float)$dataFuzzy['place_rating'];
-                }
+                $nilaiKapasitas = (float)$dataFuzzy['place_car'];
+                $nilaiRating = (float)$dataFuzzy['place_rating'];
 
                 // ini merupakan nilai konstan, nilai pakar fuzzyfikasi
-                // $kapasitasRendah = 10;
-                // $kapasitasTinggi = 40;
+                $kapasitasRendah = 10;
+                $kapasitasTinggi = 40;
                 // $ratingTinggi = 100;
                 // $ratingRendah = 50;
-                $kapasitasRendah = $lowestPlaceCar;
-                $kapasitasTinggi = $highestPlaceCar;
-                $ratingTinggi = $highestPlaceRating;
-                $ratingRendah = $lowestPlaceRating;
+                // $kapasitasRendah = $lowestPlace;
+                // $kapasitasTinggi = $highestPlace;
+                $ratingTinggi = $highestRating;
+                $ratingRendah = $lowestRating;
 
                 // hitung fuzzifikasi
                 $nilaiKapasitasRendah = 0;
@@ -680,7 +678,6 @@ class Place extends Auth
                 } else {
                     $nilaiRatingTinggi = ($nilaiRating - $ratingRendah) / ($ratingTinggi - $ratingRendah);
                 }
-
                 $dataFuzzyfikasi = [
                     'Persiapan Data ideal' => [
                         'Kapasitas rendah' => $kapasitasRendah,
@@ -734,6 +731,9 @@ class Place extends Auth
                 $totalB = $a1 + $a2 + $a3 + $a4;
                 $finalResult = $totalA / $totalB;
 
+
+
+
                 $dataDefuzzyfikasi = [
                     'Data Defuzzyfikasi' => [
                         'Total A' => $totalA,
@@ -742,6 +742,7 @@ class Place extends Auth
                         'Hasil Defuzzyfikasi' => $finalResult
                     ],
                 ];
+                // var_dump($dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi);
 
                 if ($finalResult <= 50) {
                     $dataFuzzy['place_image'] = $place_image;
