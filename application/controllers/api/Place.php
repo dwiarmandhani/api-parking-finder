@@ -584,8 +584,17 @@ class Place extends Auth
             $highestPlaceRating = 0;
 
             foreach ($filtered_places as $entry) {
-                $placeCar = intval($entry['place_car']); // Mengonversi ke integer
-                $placeRate = intval($entry['place_rating']); // Mengonversi ke integer
+                if ($entry['place_car'] === "") {
+                    $placeCar = 0; // Mengonversi ke integer
+                } else {
+                    $placeCar = intval($entry['place_car']); // Mengonversi ke integer
+                }
+
+                if ($entry['place_rating'] === "") {
+                    $placeRate = 0; // Mengonversi ke integer
+                } else {
+                    $placeRate = intval($entry['place_rating']); // Mengonversi ke integer
+                }
 
                 if ($placeCar < $lowestPlaceCar) {
                     $lowestPlaceCar = $placeCar;
