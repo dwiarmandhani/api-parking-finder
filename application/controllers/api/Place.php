@@ -727,7 +727,7 @@ class Place extends Auth
 
                 if ($finalResult <= 50) {
                     $dataFuzzy['place_image'] = $place_image;
-                    $dataFuzzy['status'] = 'Tidak Disarankan';
+                    $dataFuzzy['status'] = '';
                     $dataFuzzy['Hasil Perhitungan'] = [
                         $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
                     ];
