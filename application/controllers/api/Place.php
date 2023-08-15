@@ -710,20 +710,21 @@ class Place extends Auth
                 $r4 = 0;
                 $a1 = min($nilaiKapasitasRendah, $nilaiRatingRendah); // maka kurang ideal
                 $r1 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a1;
+
                 $a2 = min($nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
                 $r2 = $a2 * ($nilaiIdeal - $nilaiKurangIdeal) + $nilaiKurangIdeal;
 
                 $a3 =  min($nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
                 $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
-                $a4 = min($nilaiKapasitasTinggi, $nilaiRatingTinggi);
+                $a4 = min($nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
                 $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
 
                 $dataInferensiasi = [
                     'Nilai Inferensiasi' => [
-                        'Nilai a1 & r1' => $a1 . ' & ' . $r1,
-                        'Nilai a2 & r2' => $a2 . ' & ' . $r2,
-                        'Nilai a3 & r3' => $a3 . ' & ' . $r3,
-                        'Nilai a4 & r4' => $a4 . ' & ' . $r4,
+                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
+                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a2) & maka nilai ideal (r2)' => $a2 . ' & ' . $r2,
+                        'Nilai kapasitas tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' (a3) & maka tidak ideal (r3)' => $a3 . ' & ' . $r3,
+                        'Nilai kapasitas tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a4) & maka nilai ideal (r4)' => $a4 . ' & ' . $r4,
                     ]
                 ];
                 /**defuzzyfikasi */
@@ -739,7 +740,7 @@ class Place extends Auth
                         'Total A' => $totalA,
                         'Total B' => $totalB,
 
-                        'Hasil Defuzzyfikasi' => $finalResult
+                        'Hasil Defuzzyfikasi Total A / Total B' => $finalResult
                     ],
                 ];
                 // var_dump($dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi);
