@@ -642,7 +642,7 @@ class Place extends Auth
                 $nilaiRatingTinggi = 0;
 
                 $nilaiIdeal = 100;
-                $nilaiKurangIdeal = 1;
+                $nilaiKurangIdeal = 50;
 
                 // nilaiKapasitasRendah
                 if ($nilaiKapasitas >= $kapasitasTinggi) {
