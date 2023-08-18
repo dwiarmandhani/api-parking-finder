@@ -423,201 +423,217 @@ class Place extends Auth
                     $place['isRated'] = $like;
                     $place['jarak'] = round($distance, 2);
                     $filtered_places[] = $place;
-
-                    // array(4) {
-                    //     [0]=>
-                    //     array(16) {
-                    //       ["place_id"]=>
-                    //       string(2) "32"
-                    //       ["place_user_id"]=>
-                    //       string(2) "27"
-                    //       ["place_name"]=>
-                    //       string(9) "Superindo"
-                    //       ["place_address"]=>
-                    //       string(14) "Jalan rajawali"
-                    //       ["place_car"]=>
-                    //       string(1) "9"
-                    //       ["place_motor"]=>
-                    //       string(2) "20"
-                    //       ["place_description"]=>
-                    //       string(11) "mantaappppp"
-                    //       ["place_image"]=>
-                    //       string(86) "[".\/uploads\/image_place\/1690903526.png",".\/uploads\/image_place\/16909035261.png"]"
-                    //       ["place_longitude"]=>
-                    //       string(18) "-6.912447812693243"
-                    //       ["place_latitude"]=>
-                    //       string(18) "107.57540765115746"
-                    //       ["place_pic"]=>
-                    //       string(3) "Dwi"
-                    //       ["place_pic_contact"]=>
-                    //       string(12) "085721813979"
-                    //       ["place_active"]=>
-                    //       string(1) "1"
-                    //       ["place_rating"]=>
-                    //       string(2) "52"
-                    //       ["isRated"]=>
-                    //       bool(false)
-                    //       ["jarak"]=>
-                    //       float(0.24)
-                    //     }
-                    //     [1]=>
-                    //     array(16) {
-                    //       ["place_id"]=>
-                    //       string(2) "33"
-                    //       ["place_user_id"]=>
-                    //       string(2) "27"
-                    //       ["place_name"]=>
-                    //       string(20) "Rumah Sakit Rajawali"
-                    //       ["place_address"]=>
-                    //       string(77) "Jl. Rajawali Barat No.38, Maleber, Kec. Andir, Kota Bandung, Jawa Barat 40184"
-                    //       ["place_car"]=>
-                    //       string(2) "40"
-                    //       ["place_motor"]=>
-                    //       string(2) "60"
-                    //       ["place_description"]=>
-                    //       string(11) "mantaappppp"
-                    //       ["place_image"]=>
-                    //       string(86) "[".\/uploads\/image_place\/1690903586.png",".\/uploads\/image_place\/16909035861.png"]"
-                    //       ["place_longitude"]=>
-                    //       string(19) "-6.9118087612516055"
-                    //       ["place_latitude"]=>
-                    //       string(18) "107.57347646092317"
-                    //       ["place_pic"]=>
-                    //       string(3) "Dwi"
-                    //       ["place_pic_contact"]=>
-                    //       string(12) "085721813979"
-                    //       ["place_active"]=>
-                    //       string(1) "1"
-                    //       ["place_rating"]=>
-                    //       string(2) "70"
-                    //       ["isRated"]=>
-                    //       bool(true)
-                    //       ["jarak"]=>
-                    //       float(0.23)
-                    //     }
-                    //     [2]=>
-                    //     array(16) {
-                    //       ["place_id"]=>
-                    //       string(2) "34"
-                    //       ["place_user_id"]=>
-                    //       string(2) "27"
-                    //       ["place_name"]=>
-                    //       string(50) "Sate AMBAL, Sate TAICHAN, Sate MARANGGI Mas Ikhsan"
-                    //       ["place_address"]=>
-                    //       string(17) "Jl. Maleber Utara"
-                    //       ["place_car"]=>
-                    //       string(1) "5"
-                    //       ["place_motor"]=>
-                    //       string(3) "100"
-                    //       ["place_description"]=>
-                    //       string(11) "mantaappppp"
-                    //       ["place_image"]=>
-                    //       string(86) "[".\/uploads\/image_place\/1690903668.png",".\/uploads\/image_place\/16909036681.png"]"
-                    //       ["place_longitude"]=>
-                    //       string(18) "-6.907580348942091"
-                    //       ["place_latitude"]=>
-                    //       string(18) "107.57848585864954"
-                    //       ["place_pic"]=>
-                    //       string(3) "Dwi"
-                    //       ["place_pic_contact"]=>
-                    //       string(12) "085721813979"
-                    //       ["place_active"]=>
-                    //       string(1) "1"
-                    //       ["place_rating"]=>
-                    //       string(1) "5"
-                    //       ["isRated"]=>
-                    //       bool(true)
-                    //       ["jarak"]=>
-                    //       float(0.44)
-                    //     }
-                    //     [3]=>
-                    //     array(16) {
-                    //       ["place_id"]=>
-                    //       string(2) "36"
-                    //       ["place_user_id"]=>
-                    //       string(2) "27"
-                    //       ["place_name"]=>
-                    //       string(14) "Bandara husein"
-                    //       ["place_address"]=>
-                    //       string(12) "Jalan husein"
-                    //       ["place_car"]=>
-                    //       string(2) "22"
-                    //       ["place_motor"]=>
-                    //       string(3) "100"
-                    //       ["place_description"]=>
-                    //       string(11) "mantaappppp"
-                    //       ["place_image"]=>
-                    //       string(86) "[".\/uploads\/image_place\/1690903858.png",".\/uploads\/image_place\/16909038581.png"]"
-                    //       ["place_longitude"]=>
-                    //       string(17) "-6.90316179339655"
-                    //       ["place_latitude"]=>
-                    //       string(18) "107.57999013903179"
-                    //       ["place_pic"]=>
-                    //       string(3) "Dwi"
-                    //       ["place_pic_contact"]=>
-                    //       string(12) "085721813979"
-                    //       ["place_active"]=>
-                    //       string(1) "1"
-                    //       ["place_rating"]=>
-                    //       string(2) "76"
-                    //       ["isRated"]=>
-                    //       bool(false)
-                    //       ["jarak"]=>
-                    //       float(0.61)
-                    //     }
-                    //   }
                 }
             }
-            // var_dump($filtered_places);
-            // foreach 
 
-            // kemudian proses fuzzy
 
-            // 1. Fuzzifikasi
-            // TIngkat kapasitas 10 40
-            // tinglat rating 50 100
-            // tingkat ideal
-            // $lowestRating = PHP_INT_MAX;
-            // $highestRating = PHP_INT_MIN;
-            // $lowestPlace = PHP_INT_MAX;
-            // $highestPlace = PHP_INT_MIN;
+            $dataForyou = array();
+            foreach ($filtered_places as $dataFuzzy) {
+                $place_image = json_decode($dataFuzzy['place_image']);
+                $nilaiKapasitas = (float)$dataFuzzy['place_car'];
+                $nilaiRating = (float)$dataFuzzy['place_rating'];
 
-            // foreach ($filtered_places as $data) {
-            //     $rating = (int)$data["place_rating"];
-            //     // $place = (int)$data["place_car"];
+                // ini merupakan nilai konstan, nilai pakar fuzzyfikasi
+                $kapasitasRendah = 10;
+                $kapasitasTinggi = 40;
+                $ratingTinggi = 100;
+                $ratingRendah = 50;
+                // $kapasitasRendah = $lowestPlace;
+                // $kapasitasTinggi = $highestPlace;
+                // $ratingTinggi = $highestRating;
+                // $ratingRendah = $lowestRating;
 
-            //     if ($rating < $lowestRating) {
-            //         if ($rating === 0) {
-            //             $lowestRating = 50;
-            //         } else {
-            //             $lowestRating = $rating;
-            //         }
-            //     }
+                // hitung fuzzifikasi
+                $nilaiKapasitasRendah = 0;
+                $nilaiKapasitasTinggi = 0;
+                $nilaiRatingRendah = 0;
+                $nilaiRatingTinggi = 0;
 
-            //     if ($rating > $highestRating) {
-            //         if ($rating === 0) {
-            //             $highestRating = 100;
-            //         } else {
-            //             $highestRating = $rating;
-            //         }
-            //     }
+                $nilaiIdeal = 100;
+                $nilaiKurangIdeal = 50;
 
-            //     if ($place < $lowestPlace) {
-            //         if ($place === 0) {
-            //             $lowestPlace = 10;
-            //         } else {
-            //             $lowestPlace = $place;
-            //         }
-            //     }
+                // nilaiKapasitasRendah
+                if ($nilaiKapasitas >= $kapasitasTinggi) {
+                    $nilaiKapasitasRendah = 0;
+                } else if ($nilaiKapasitas <= $kapasitasRendah) {
+                    $nilaiKapasitasRendah = 1;
+                } else {
+                    $nilaiKapasitasRendah = ($kapasitasTinggi - $nilaiKapasitas) / ($kapasitasTinggi - $kapasitasRendah);
+                }
+                // 
+                // nilai kapasitas tinggi
+                if ($nilaiKapasitas <= $kapasitasRendah) {
+                    $nilaiKapasitasTinggi = 0;
+                } else if ($nilaiKapasitas >= 40) {
+                    $nilaiKapasitasTinggi = 1;
+                } else {
+                    $nilaiKapasitasTinggi = ($nilaiKapasitas - $kapasitasRendah) / ($kapasitasTinggi - $kapasitasRendah);
+                }
+                // nilai rating rndah
+                if ($nilaiRating >= $ratingTinggi) {
+                    $nilaiRatingRendah = 0;
+                } elseif ($nilaiRating <= $ratingRendah) {
+                    $nilaiRatingRendah = 1;
+                } else {
+                    $nilaiRatingRendah = ($ratingTinggi - $nilaiRating) / ($ratingTinggi - $ratingRendah);
+                }
 
-            //     if ($place > $highestPlace) {
-            //         if ($place === 0) {
-            //             $highestPlace = 40;
-            //         } else {
-            //             $highestPlace = $place;
-            //         }
-            //     }
-            // }
+                // nilai rating tinggi
+                if ($nilaiRating <= $ratingRendah) {
+                    $nilaiRatingTinggi = 0;
+                } else if ($nilaiRating >= $ratingTinggi) {
+                    $nilaiRatingTinggi = 1;
+                } else {
+                    $nilaiRatingTinggi = ($nilaiRating - $ratingRendah) / ($ratingTinggi - $ratingRendah);
+                }
+                $dataFuzzyfikasi = [
+                    'Persiapan Data ideal' => [
+                        'Kapasitas rendah' => $kapasitasRendah,
+                        'Kapasitas tinggi' => $kapasitasTinggi,
+                        'Rating rendah' => $ratingRendah,
+                        'Rating tinggi' => $ratingTinggi,
+                        'Nilai Ideal' => $nilaiIdeal,
+                        'Nilai Kurang Ideal' => $nilaiKurangIdeal,
+                    ],
+                    'Nilai Fuzzi' => [
+                        'Nilai kapasitas rendah' => $nilaiKapasitasRendah,
+                        'Nilai kapasitas tinggi' => $nilaiKapasitasTinggi,
+                        'Nilai rating rendah' => $nilaiRatingRendah,
+                        'Nilai rating tinggi' => $nilaiRatingTinggi,
+                    ]
+                ];
+                // var_dump($nilaiRatingTinggi);
+
+                // 2. inferensiasi
+                // Rules :
+                // kapasitas rendah && rating rendah = kurang ideal
+                // kapasitas rendah && rating tinggi = ideal
+                // kapasitas tinggi && rating rendah = kurang idela
+                // kapasitas tinggi && rating tinggi = ideal
+
+
+                $r1 = 0;
+                $r2 = 0;
+                $r3 = 0;
+                $r4 = 0;
+                $a1 = min($nilaiKapasitasRendah, $nilaiRatingRendah); // maka kurang ideal
+                $r1 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a1;
+
+                $a2 = min($nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
+                $r2 = $a2 * ($nilaiIdeal - $nilaiKurangIdeal) + $nilaiKurangIdeal;
+
+                $a3 =  min($nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
+                $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
+                $a4 = min($nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
+                $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
+
+                $dataInferensiasi = [
+                    'Nilai Inferensiasi' => [
+                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
+                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a2) & maka nilai ideal (r2)' => $a2 . ' & ' . $r2,
+                        'Nilai kapasitas tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' (a3) & maka tidak ideal (r3)' => $a3 . ' & ' . $r3,
+                        'Nilai kapasitas tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a4) & maka nilai ideal (r4)' => $a4 . ' & ' . $r4,
+                    ]
+                ];
+                /**defuzzyfikasi */
+                $totalA = ($a1 * $r1) + ($a2 * $r2) + ($a3 * $r3) + ($a4 * $r4);
+                $totalB = $a1 + $a2 + $a3 + $a4;
+                $finalResult = $totalA / $totalB;
+
+
+
+
+                $dataDefuzzyfikasi = [
+                    'Data Defuzzyfikasi' => [
+                        'Total A' => $totalA,
+                        'Total B' => $totalB,
+
+                        'Hasil Defuzzyfikasi Total A / Total B' => $finalResult
+                    ],
+                ];
+                // var_dump($dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi);
+
+                if ($finalResult <= 50) {
+                    $dataFuzzy['place_image'] = $place_image;
+                    $dataFuzzy['status'] = '';
+                    $dataFuzzy['Hasil Perhitungan'] = [
+                        $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
+                    ];
+
+                    $dataForyou[] = $dataFuzzy;
+                } else {
+                    $dataFuzzy['place_image'] = $place_image;
+                    $dataFuzzy['status'] = 'Disarankan untuk Anda';
+                    $dataFuzzy['Hasil Perhitungan'] = [
+                        $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
+                    ];
+                    $dataForyou[] = $dataFuzzy;
+                }
+            }
+            $sorted_places = $this->place->sort_places_by_status_and_jarak($dataForyou);
+            // var_dump($dataForyou);
+
+            $this->response([
+                'status' => true,
+                'message' => 'Data ditemukan!',
+                'place' => $sorted_places
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'Data tidak ditemukan'
+            ], REST_Controller::HTTP_NO_CONTENT);
+        }
+    }
+    public function getplaceall_get()
+    {
+        $user_id = $this->getLoggedId();
+        // query jarak user saat ini
+        $userLastLocation = $this->db->get_where('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id])->result();
+
+        if (!$userLastLocation) {
+            $latitude_last = 0;
+            $longitude_last = 0;
+        } else {
+            $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
+            $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
+
+            // ["lastlocation_longitude"]=>
+            // string(9) "-6.905895"
+            // ["lastlocation_latitude"]=>
+            // string(10) "107.574530"
+        }
+        $like = false;
+        // $distance_threshold = 1.0;
+        // query data place rentang 1 KM terdekat
+        $dataPlace = $this->db->get('tbl_place')->result_array();
+
+        if ($dataPlace) {
+            $filtered_places = array();
+
+            // jadikan array
+            foreach ($dataPlace as $place) {
+                /** cek like */
+                $dataLike = $this->db->get_where('tbl_ratings', ['rating_user_id' => $user_id, 'rating_place_id' => $place['place_id']])->result();
+                if ($dataLike) {
+                    $like = true;
+                } else {
+                    $like = false;
+                }
+                // die;
+                /** EOF cek like */
+                // $lat2 = (float) $place['place_latitude'];
+                // $lon2 = (float) $place['place_longitude'];
+
+                // $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
+
+                // if ($distance <= $distance_threshold) {
+                $place['isRated'] = $like;
+                // $place['jarak'] = round($distance, 2);
+                $filtered_places[] = $place;
+                // }
+            }
+
 
             $dataForyou = array();
             foreach ($filtered_places as $dataFuzzy) {
