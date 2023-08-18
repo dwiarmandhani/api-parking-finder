@@ -622,14 +622,14 @@ class Place extends Auth
                 }
                 // die;
                 /** EOF cek like */
-                // $lat2 = (float) $place['place_latitude'];
-                // $lon2 = (float) $place['place_longitude'];
+                $lat2 = (float) $place['place_latitude'];
+                $lon2 = (float) $place['place_longitude'];
 
-                // $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
+                $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
 
                 // if ($distance <= $distance_threshold) {
                 $place['isRated'] = $like;
-                // $place['jarak'] = round($distance, 2);
+                $place['jarak'] = round($distance, 2);
                 $filtered_places[] = $place;
                 // }
             }
