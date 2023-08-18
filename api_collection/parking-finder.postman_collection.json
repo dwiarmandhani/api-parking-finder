@@ -1,0 +1,998 @@
+{
+	"info": {
+		"_postman_id": "a0d91ca7-54ee-4248-8fbe-b3f121245642",
+		"name": "parking-finder",
+		"description": "URL: [https://apiparkingapp.000webhostapp.com/]()\n\nPut the public-key on Body/params : 7fcf4ba391c48784edde599889d6e3f1e47a27db36ecc050cc92f259bfac38afad2c68a1ae804d77075e8fb722503f3eca2b2c1006ee6f6c7b7628cb45fffd1d",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9199416"
+	},
+	"item": [
+		{
+			"name": "00 create public key",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "create_key",
+							"value": "admin123",
+							"type": "text"
+						},
+						{
+							"key": "public-key",
+							"value": "generateNewKey",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/auth/generatePublicKey",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"generatePublicKey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_name",
+							"value": "adnan",
+							"type": "text"
+						},
+						{
+							"key": "user_phone",
+							"value": "085721813979",
+							"type": "text"
+						},
+						{
+							"key": "user_email",
+							"value": "adnan@parking.com",
+							"type": "text"
+						},
+						{
+							"key": "user_password",
+							"value": "@aduhlupa123",
+							"type": "text"
+						},
+						{
+							"key": "user_is_admin",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "user_is_pengelola",
+							"value": "1",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "public-key",
+							"value": "{{apikey}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/auth/register",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user_email",
+							"value": "admindwi@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "user_password",
+							"value": "@aduhlupa123",
+							"type": "text"
+						},
+						{
+							"key": "public-key",
+							"value": "{{apikey}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/auth/login",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getlastlocation",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTIyNTIxNjYsImV4cCI6MTY5MjMzODU2Nn0.R2UYQfaeBDu_nXHEkVYSbRMHEdtnQnH4aXzpF-akeGw",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}",
+							"type": "text"
+						},
+						{
+							"key": "last_longitude",
+							"value": "107.70349046590138",
+							"type": "text"
+						},
+						{
+							"key": "last_latitude",
+							"value": "-6.947901492104855",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/place/getLastLoc",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"getLastLoc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getUser",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTEzODkxNjgsImV4cCI6MTY5MTQ3NTU2OH0.hfE1JqFK6krx2EhBTNnkqkMEx13ruY79sZAtXBAvAzE",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/api/users/getusers?public-key={{apikey}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"getusers"
+					],
+					"query": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPlaceUser",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTEzODkxNjgsImV4cCI6MTY5MTQ3NTU2OH0.hfE1JqFK6krx2EhBTNnkqkMEx13ruY79sZAtXBAvAzE",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/api/place/getplacebyuser?public-key={{apikey}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"getplacebyuser"
+					],
+					"query": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPlaceUserAdmin",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTEzODkxNjgsImV4cCI6MTY5MTQ3NTU2OH0.hfE1JqFK6krx2EhBTNnkqkMEx13ruY79sZAtXBAvAzE",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/api/place/getplacebyuseradmin?public-key={{apikey}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"getplacebyuseradmin"
+					],
+					"query": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addplace",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTA5MDE0NzYsImV4cCI6MTY5MDk4Nzg3Nn0.pHzyurL9LSkhcCy1TVp9ChONMkAk0ePXVStzh5_QkUU",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "place[0]",
+							"type": "file",
+							"src": "/D:/Group 5.png"
+						},
+						{
+							"key": "place[1]",
+							"type": "file",
+							"src": "/D:/Group 4.png"
+						},
+						{
+							"key": "public-key",
+							"value": "{{apikey}}",
+							"type": "text"
+						},
+						{
+							"key": "place_name",
+							"value": "Taman Hutan Raya Ir. H. Djuanda",
+							"type": "text"
+						},
+						{
+							"key": "place_address",
+							"value": "Kompleks Tahura, Jl. Ir. H. Juanda No.99, Ciburial, Kec. Cimenyan, Kabupaten Bandung, Jawa Barat 40198",
+							"type": "text"
+						},
+						{
+							"key": "place_longitude",
+							"value": "-6.856702481282392",
+							"type": "text"
+						},
+						{
+							"key": "place_latidute",
+							"value": "107.62900828179558",
+							"type": "text"
+						},
+						{
+							"key": "place_car",
+							"value": "29",
+							"type": "text"
+						},
+						{
+							"key": "place_motor",
+							"value": "100",
+							"type": "text"
+						},
+						{
+							"key": "place_pic",
+							"value": "Dwi",
+							"type": "text"
+						},
+						{
+							"key": "place_pic_contact",
+							"value": "085721813979",
+							"type": "text"
+						},
+						{
+							"key": "place_desc",
+							"value": "mantaappppp",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/place/addplace",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"addplace"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addlike",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTEzODkxNjgsImV4cCI6MTY5MTQ3NTU2OH0.hfE1JqFK6krx2EhBTNnkqkMEx13ruY79sZAtXBAvAzE",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "place_id",
+							"value": "36",
+							"type": "text"
+						},
+						{
+							"key": "public-key",
+							"value": "{{apikey}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/place/addlike",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"addlike"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editplace",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTEyODU2NzgsImV4cCI6MTY5MTM3MjA3OH0.UR3rMVDa1rQp8XgeNzGJsE4p9WZ63c59beg5ydQnaZw",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}",
+							"type": "text"
+						},
+						{
+							"key": "place_id",
+							"value": "31",
+							"type": "text"
+						},
+						{
+							"key": "place_name",
+							"value": "alfa garuda",
+							"type": "text"
+						},
+						{
+							"key": "place_address",
+							"value": "jl kenangan",
+							"type": "text"
+						},
+						{
+							"key": "place_car",
+							"value": "15",
+							"type": "text"
+						},
+						{
+							"key": "place_motor",
+							"value": "10",
+							"type": "text"
+						},
+						{
+							"key": "place_description",
+							"value": "hehe",
+							"type": "text"
+						},
+						{
+							"key": "place_longitude",
+							"value": "2222",
+							"type": "text"
+						},
+						{
+							"key": "place_latitude",
+							"value": "22222",
+							"type": "text"
+						},
+						{
+							"key": "place_pic",
+							"value": "Wow",
+							"type": "text"
+						},
+						{
+							"key": "place_pic_contact",
+							"value": "081555555",
+							"type": "text"
+						},
+						{
+							"key": "place_active",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/place/editplace",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"editplace"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editusers(for admin)",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTEyODU2NzgsImV4cCI6MTY5MTM3MjA3OH0.UR3rMVDa1rQp8XgeNzGJsE4p9WZ63c59beg5ydQnaZw",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}",
+							"type": "text"
+						},
+						{
+							"key": "user_id",
+							"value": "23",
+							"type": "text"
+						},
+						{
+							"key": "user_name",
+							"value": "Dwi Adm",
+							"type": "text"
+						},
+						{
+							"key": "user_phone",
+							"value": "08156221991",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/users/editusersadmin",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"editusersadmin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "editusers",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTEyODU2NzgsImV4cCI6MTY5MTM3MjA3OH0.UR3rMVDa1rQp8XgeNzGJsE4p9WZ63c59beg5ydQnaZw",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}",
+							"type": "text"
+						},
+						{
+							"key": "user_id",
+							"value": "2",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "@admin123",
+							"type": "text"
+						},
+						{
+							"key": "confirm_password",
+							"value": "@admin123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/users/changespasswords",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"changespasswords"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "changedpassword",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTEyODU2NzgsImV4cCI6MTY5MTM3MjA3OH0.UR3rMVDa1rQp8XgeNzGJsE4p9WZ63c59beg5ydQnaZw",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "@aduhlupa123",
+							"type": "text"
+						},
+						{
+							"key": "confirm_password",
+							"value": "@aduhlupa123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/users/changespasswords",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"changespasswords"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteplace",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTEyODY1NTksImV4cCI6MTY5MTM3Mjk1OX0.Uh9xyckoaovmiTjw5ntjg8aqlkvbmFJ-fKp-MgsbYZM",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "place_id",
+							"value": "31",
+							"type": "text"
+						},
+						{
+							"key": "public-key",
+							"value": "{{apikey}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseurl}}/api/place/deleteplace",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"deleteplace"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getplace",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTIyNTIxNjYsImV4cCI6MTY5MjMzODU2Nn0.R2UYQfaeBDu_nXHEkVYSbRMHEdtnQnH4aXzpF-akeGw",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/api/place/getplace?public-key={{apikey}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"getplace"
+					],
+					"query": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getplaceall",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTIyNTIxNjYsImV4cCI6MTY5MjMzODU2Nn0.R2UYQfaeBDu_nXHEkVYSbRMHEdtnQnH4aXzpF-akeGw",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/api/place/getplaceall?public-key={{apikey}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"getplaceall"
+					],
+					"query": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getplacebylike",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTIyNTIxNjYsImV4cCI6MTY5MjMzODU2Nn0.R2UYQfaeBDu_nXHEkVYSbRMHEdtnQnH4aXzpF-akeGw",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/api/place/getplacebylike?public-key={{apikey}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"getplacebylike"
+					],
+					"query": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getplacebydistance",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTIyNTIxNjYsImV4cCI6MTY5MjMzODU2Nn0.R2UYQfaeBDu_nXHEkVYSbRMHEdtnQnH4aXzpF-akeGw",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/api/place/getplacebydistance?public-key={{apikey}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"getplacebydistance"
+					],
+					"query": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "searchplace",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI3IiwibmFtZSI6ImFkbWluZHdpIiwiZW1haWwiOiJhZG1pbmR3aUBnbWFpbC5jb20iLCJpYXQiOjE2OTE0ODA4ODYsImV4cCI6MTY5MTU2NzI4Nn0.3zzlJub0217mnw65zdvCjbod-Xkg7-9KdXYB2PYksCg",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseurl}}/api/place/searchplace?public-key={{apikey}}&keyword=mas",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"api",
+						"place",
+						"searchplace"
+					],
+					"query": [
+						{
+							"key": "public-key",
+							"value": "{{apikey}}"
+						},
+						{
+							"key": "keyword",
+							"value": "mas"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "coba",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
