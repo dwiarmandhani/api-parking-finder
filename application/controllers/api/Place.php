@@ -460,11 +460,10 @@ class Place extends Auth
                 } else {
                     $nilaiKapasitasRendah = ($kapasitasTinggi - $nilaiKapasitas) / ($kapasitasTinggi - $kapasitasRendah);
                 }
-                // 
                 // nilai kapasitas tinggi
                 if ($nilaiKapasitas <= $kapasitasRendah) {
                     $nilaiKapasitasTinggi = 0;
-                } else if ($nilaiKapasitas >= 40) {
+                } else if ($nilaiKapasitas >= $kapasitasTinggi) {
                     $nilaiKapasitasTinggi = 1;
                 } else {
                     $nilaiKapasitasTinggi = ($nilaiKapasitas - $kapasitasRendah) / ($kapasitasTinggi - $kapasitasRendah);
