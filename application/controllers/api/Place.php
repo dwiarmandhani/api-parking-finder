@@ -721,8 +721,6 @@ class Place extends Auth
                     ]
                 ];
                 // 2. inferensiasi
-
-
                 $r1 = 0;
                 $r2 = 0;
                 $r3 = 0;
@@ -752,10 +750,6 @@ class Place extends Auth
                 $totalA = ($a1 * $r1) + ($a2 * $r2) + ($a3 * $r3) + ($a4 * $r4);
                 $totalB = $a1 + $a2 + $a3 + $a4;
                 $finalResult = $totalA / $totalB;
-
-
-
-
                 $dataDefuzzyfikasi = [
                     'Data Defuzzyfikasi' => [
                         'Total A' => $totalA,
@@ -764,7 +758,6 @@ class Place extends Auth
                         'Hasil Defuzzyfikasi Total A / Total B' => $finalResult
                     ],
                 ];
-                // var_dump($dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi);
 
                 if ($finalResult <= 50) {
                     $dataFuzzy['place_image'] = $place_image;
@@ -851,20 +844,21 @@ class Place extends Auth
             $dataForyou = array();
             foreach ($filtered_places as $dataFuzzy) {
                 $place_image = json_decode($dataFuzzy['place_image']);
+                $nilaiJarak = (float) $dataFuzzy['jarak'];
                 $nilaiKapasitas = (float)$dataFuzzy['place_car'];
                 $nilaiRating = (float)$dataFuzzy['place_rating'];
 
                 // ini merupakan nilai konstan, nilai pakar fuzzyfikasi
+                $JarakRendah = 0.1;
+                $JarakTinggi = 1;
                 $kapasitasRendah = 10;
                 $kapasitasTinggi = 40;
                 $ratingTinggi = 100;
                 $ratingRendah = 50;
-                // $kapasitasRendah = $lowestPlace;
-                // $kapasitasTinggi = $highestPlace;
-                // $ratingTinggi = $highestRating;
-                // $ratingRendah = $lowestRating;
 
                 // hitung fuzzifikasi
+                $nilaiJarakRendah = 0;
+                $nilaiJarakTinggi = 0;
                 $nilaiKapasitasRendah = 0;
                 $nilaiKapasitasTinggi = 0;
                 $nilaiRatingRendah = 0;
@@ -872,6 +866,24 @@ class Place extends Auth
 
                 $nilaiIdeal = 100;
                 $nilaiKurangIdeal = 50;
+
+                //nilaiJarakRendah
+                if ($nilaiJarak >= $JarakTinggi) {
+                    $nilaiJarakRendah = 0;
+                } else if ($nilaiJarak <= $JarakRendah) {
+                    $nilaiJarakRendah = 1;
+                } else {
+                    $nilaiJarakRendah = ($JarakTinggi - $nilaiJarak) / ($JarakTinggi - $JarakRendah);
+                }
+
+                //nilaiJarakTinggi
+                if ($nilaiJarak >= $JarakTinggi) {
+                    $nilaiJarakTinggi = 1;
+                } else if ($nilaiJarak <= $JarakRendah) {
+                    $nilaiJarakTinggi = 0;
+                } else {
+                    $nilaiJarakTinggi = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
+                }
 
                 // nilaiKapasitasRendah
                 if ($nilaiKapasitas >= $kapasitasTinggi) {
@@ -909,6 +921,8 @@ class Place extends Auth
                 }
                 $dataFuzzyfikasi = [
                     'Persiapan Data ideal' => [
+                        'Jarak rendah' => $JarakRendah,
+                        'Jarak tinggi' => $JarakTinggi,
                         'Kapasitas rendah' => $kapasitasRendah,
                         'Kapasitas tinggi' => $kapasitasTinggi,
                         'Rating rendah' => $ratingRendah,
@@ -917,53 +931,43 @@ class Place extends Auth
                         'Nilai Kurang Ideal' => $nilaiKurangIdeal,
                     ],
                     'Nilai Fuzzi' => [
+                        'Nilai Jarak rendah' => $nilaiJarakRendah,
+                        'Nilai Jarak tinggi' => $nilaiJarakTinggi,
                         'Nilai kapasitas rendah' => $nilaiKapasitasRendah,
                         'Nilai kapasitas tinggi' => $nilaiKapasitasTinggi,
                         'Nilai rating rendah' => $nilaiRatingRendah,
                         'Nilai rating tinggi' => $nilaiRatingTinggi,
                     ]
                 ];
-                // var_dump($nilaiRatingTinggi);
 
                 // 2. inferensiasi
-                // Rules :
-                // kapasitas rendah && rating rendah = kurang ideal
-                // kapasitas rendah && rating tinggi = ideal
-                // kapasitas tinggi && rating rendah = kurang idela
-                // kapasitas tinggi && rating tinggi = ideal
-
-
+                // 2. inferensiasi
                 $r1 = 0;
                 $r2 = 0;
                 $r3 = 0;
                 $r4 = 0;
-                $a1 = min($nilaiKapasitasRendah, $nilaiRatingRendah); // maka kurang ideal
+                $a1 = min($nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiRatingRendah); // maka kurang ideal
                 $r1 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a1;
 
-                $a2 = min($nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
+                $a2 = min($nilaiJarakRendah, $nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
                 $r2 = $a2 * ($nilaiIdeal - $nilaiKurangIdeal) + $nilaiKurangIdeal;
 
-                $a3 =  min($nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
+                $a3 =  min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
                 $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
-                $a4 = min($nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
+                $a4 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
                 $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
-
                 $dataInferensiasi = [
                     'Nilai Inferensiasi' => [
-                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
+                        'Nilai jarak tinggi: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
                         'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a2) & maka nilai ideal (r2)' => $a2 . ' & ' . $r2,
                         'Nilai kapasitas tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' (a3) & maka tidak ideal (r3)' => $a3 . ' & ' . $r3,
-                        'Nilai kapasitas tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a4) & maka nilai ideal (r4)' => $a4 . ' & ' . $r4,
+                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a4) & maka nilai ideal (r4)' => $a4 . ' & ' . $r4,
                     ]
                 ];
                 /**defuzzyfikasi */
                 $totalA = ($a1 * $r1) + ($a2 * $r2) + ($a3 * $r3) + ($a4 * $r4);
                 $totalB = $a1 + $a2 + $a3 + $a4;
                 $finalResult = $totalA / $totalB;
-
-
-
-
                 $dataDefuzzyfikasi = [
                     'Data Defuzzyfikasi' => [
                         'Total A' => $totalA,
