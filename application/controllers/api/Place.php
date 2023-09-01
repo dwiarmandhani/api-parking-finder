@@ -656,7 +656,7 @@ class Place extends Auth
                 } else if ($nilaiJarak <= $JarakRendah) {
                     $nilaiJarakRendah = 1;
                 } else {
-                    $nilaiJarakRendah = ($JarakTinggi - $nilaiKapasitas) / ($JarakTinggi - $JarakRendah);
+                    $nilaiJarakRendah = ($JarakTinggi - $nilaiJarak) / ($JarakTinggi - $JarakRendah);
                 }
 
                 //nilaiJarakTinggi
@@ -665,7 +665,7 @@ class Place extends Auth
                 } else if ($nilaiJarak <= $JarakRendah) {
                     $nilaiJarakTinggi = 0;
                 } else {
-                    $nilaiJarakTinggi = ($JarakTinggi - $nilaiKapasitas) / ($JarakTinggi - $JarakRendah);
+                    $nilaiJarakTinggi = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
                 }
                 // nilaiKapasitasRendah
                 if ($nilaiKapasitas >= $kapasitasTinggi) {
@@ -673,7 +673,7 @@ class Place extends Auth
                 } else if ($nilaiKapasitas <= $kapasitasRendah) {
                     $nilaiKapasitasRendah = 1;
                 } else {
-                    $nilaiKapasitasRendah = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
+                    $nilaiKapasitasRendah = ($kapasitasTinggi - $nilaiKapasitas) / ($kapasitasTinggi - $kapasitasRendah);
                 }
                 // nilai kapasitas tinggi
                 if ($nilaiKapasitas <= $kapasitasRendah) {
@@ -702,6 +702,8 @@ class Place extends Auth
                 }
                 $dataFuzzyfikasi = [
                     'Persiapan Data ideal' => [
+                        'Jarak rendah' => $JarakRendah,
+                        'Jarak tinggi' => $JarakTinggi,
                         'Kapasitas rendah' => $kapasitasRendah,
                         'Kapasitas tinggi' => $kapasitasTinggi,
                         'Rating rendah' => $ratingRendah,
@@ -733,6 +735,8 @@ class Place extends Auth
                 $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
                 $a4 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
                 $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
+
+                // var_dump()
 
                 $dataInferensiasi = [
                     'Nilai Inferensiasi' => [
