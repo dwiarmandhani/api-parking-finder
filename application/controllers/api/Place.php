@@ -712,6 +712,8 @@ class Place extends Auth
                         'Nilai Kurang Ideal' => $nilaiKurangIdeal,
                     ],
                     'Nilai Fuzzi' => [
+                        'Nilai Jarak rendah' => $nilaiJarakRendah,
+                        'Nilai Jarak tinggi' => $nilaiJarakTinggi,
                         'Nilai kapasitas rendah' => $nilaiKapasitasRendah,
                         'Nilai kapasitas tinggi' => $nilaiKapasitasTinggi,
                         'Nilai rating rendah' => $nilaiRatingRendah,
