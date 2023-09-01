@@ -377,7 +377,7 @@ class Place extends Auth
         }
     }
     // untuk fitur get tempat (fuzzy tsukamoto)
-    public function getplace_get()
+    public function getplaceold_get()
     {
         $user_id = $this->getLoggedId();
         // query jarak user saat ini
@@ -438,10 +438,6 @@ class Place extends Auth
                 $kapasitasTinggi = 40;
                 $ratingTinggi = 100;
                 $ratingRendah = 50;
-                // $kapasitasRendah = $lowestPlace;
-                // $kapasitasTinggi = $highestPlace;
-                // $ratingTinggi = $highestRating;
-                // $ratingRendah = $lowestRating;
 
                 // hitung fuzzifikasi
                 $nilaiKapasitasRendah = 0;
@@ -501,14 +497,7 @@ class Place extends Auth
                         'Nilai rating tinggi' => $nilaiRatingTinggi,
                     ]
                 ];
-                // var_dump($nilaiRatingTinggi);
-
                 // 2. inferensiasi
-                // Rules :
-                // kapasitas rendah && rating rendah = kurang ideal
-                // kapasitas rendah && rating tinggi = ideal
-                // kapasitas tinggi && rating rendah = kurang idela
-                // kapasitas tinggi && rating tinggi = ideal
 
 
                 $r1 = 0;
@@ -524,6 +513,225 @@ class Place extends Auth
                 $a3 =  min($nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
                 $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
                 $a4 = min($nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
+                $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
+
+                $dataInferensiasi = [
+                    'Nilai Inferensiasi' => [
+                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
+                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a2) & maka nilai ideal (r2)' => $a2 . ' & ' . $r2,
+                        'Nilai kapasitas tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' (a3) & maka tidak ideal (r3)' => $a3 . ' & ' . $r3,
+                        'Nilai kapasitas tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a4) & maka nilai ideal (r4)' => $a4 . ' & ' . $r4,
+                    ]
+                ];
+                /**defuzzyfikasi */
+                $totalA = ($a1 * $r1) + ($a2 * $r2) + ($a3 * $r3) + ($a4 * $r4);
+                $totalB = $a1 + $a2 + $a3 + $a4;
+                $finalResult = $totalA / $totalB;
+
+
+
+
+                $dataDefuzzyfikasi = [
+                    'Data Defuzzyfikasi' => [
+                        'Total A' => $totalA,
+                        'Total B' => $totalB,
+
+                        'Hasil Defuzzyfikasi Total A / Total B' => $finalResult
+                    ],
+                ];
+                // var_dump($dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi);
+
+                if ($finalResult <= 50) {
+                    $dataFuzzy['place_image'] = $place_image;
+                    $dataFuzzy['status'] = '';
+                    $dataFuzzy['Hasil Perhitungan'] = [
+                        $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
+                    ];
+
+                    $dataForyou[] = $dataFuzzy;
+                } else {
+                    $dataFuzzy['place_image'] = $place_image;
+                    $dataFuzzy['status'] = 'Disarankan untuk Anda';
+                    $dataFuzzy['Hasil Perhitungan'] = [
+                        $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
+                    ];
+                    $dataForyou[] = $dataFuzzy;
+                }
+            }
+            $sorted_places = $this->place->sort_places_by_status_and_jarak($dataForyou);
+            // var_dump($dataForyou);
+
+            $this->response([
+                'status' => true,
+                'message' => 'Data ditemukan!',
+                'place' => $sorted_places
+            ], REST_Controller::HTTP_OK);
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'Data tidak ditemukan'
+            ], REST_Controller::HTTP_NO_CONTENT);
+        }
+    }
+    public function getplace_get()
+    {
+        $user_id = $this->getLoggedId();
+        // query jarak user saat ini
+        $userLastLocation = $this->db->get_where('tbl_user_lastlocation', ['lastlocation_user_id' => $user_id])->result();
+
+        if (!$userLastLocation) {
+            $latitude_last = 0;
+            $longitude_last = 0;
+        } else {
+            $latitude_last = (float)$userLastLocation[0]->lastlocation_latitude;
+            $longitude_last = (float)$userLastLocation[0]->lastlocation_longitude;
+
+            // ["lastlocation_longitude"]=>
+            // string(9) "-6.905895"
+            // ["lastlocation_latitude"]=>
+            // string(10) "107.574530"
+        }
+        $like = false;
+        $distance_threshold = 1.0;
+        // query data place rentang 1 KM terdekat
+        $dataPlace = $this->db->get('tbl_place')->result_array();
+
+        if ($dataPlace) {
+            $filtered_places = array();
+
+            // jadikan array
+            foreach ($dataPlace as $place) {
+                /** cek like */
+                $dataLike = $this->db->get_where('tbl_ratings', ['rating_user_id' => $user_id, 'rating_place_id' => $place['place_id']])->result();
+                if ($dataLike) {
+                    $like = true;
+                } else {
+                    $like = false;
+                }
+                // die;
+                /** EOF cek like */
+                $lat2 = (float) $place['place_latitude'];
+                $lon2 = (float) $place['place_longitude'];
+
+                $distance = $this->place->haversineDistance($latitude_last, $longitude_last, $lat2, $lon2);
+
+                if ($distance <= $distance_threshold) {
+                    $place['isRated'] = $like;
+                    $place['jarak'] = round($distance, 2);
+                    $filtered_places[] = $place;
+                }
+            }
+
+
+            $dataForyou = array();
+            foreach ($filtered_places as $dataFuzzy) {
+                $place_image = json_decode($dataFuzzy['place_image']);
+
+                $nilaiJarak = (float) $dataFuzzy['jarak'];
+                $nilaiKapasitas = (float)$dataFuzzy['place_car'];
+                $nilaiRating = (float)$dataFuzzy['place_rating'];
+
+                // ini merupakan nilai konstan, nilai pakar fuzzyfikasi
+                $JarakRendah = 0.1;
+                $JarakTinggi = 1;
+                $kapasitasRendah = 10;
+                $kapasitasTinggi = 40;
+                $ratingTinggi = 100;
+                $ratingRendah = 50;
+
+                // hitung fuzzifikasi
+                $nilaiJarakRendah = 0;
+                $nilaiJarakTinggi = 0;
+                $nilaiKapasitasRendah = 0;
+                $nilaiKapasitasTinggi = 0;
+                $nilaiRatingRendah = 0;
+                $nilaiRatingTinggi = 0;
+
+                $nilaiIdeal = 100;
+                $nilaiKurangIdeal = 50;
+
+                //nilaiJarakRendah
+                if ($nilaiJarak >= $JarakTinggi) {
+                    $nilaiJarakRendah = 0;
+                } else if ($nilaiJarak <= $JarakRendah) {
+                    $nilaiJarakRendah = 1;
+                } else {
+                    $nilaiJarakRendah = ($JarakTinggi - $nilaiKapasitas) / ($JarakTinggi - $JarakRendah);
+                }
+
+                //nilaiJarakTinggi
+                if ($nilaiJarak >= $JarakTinggi) {
+                    $nilaiJarakTinggi = 1;
+                } else if ($nilaiJarak <= $JarakRendah) {
+                    $nilaiJarakTinggi = 0;
+                } else {
+                    $nilaiJarakTinggi = ($JarakTinggi - $nilaiKapasitas) / ($JarakTinggi - $JarakRendah);
+                }
+                // nilaiKapasitasRendah
+                if ($nilaiKapasitas >= $kapasitasTinggi) {
+                    $nilaiKapasitasRendah = 0;
+                } else if ($nilaiKapasitas <= $kapasitasRendah) {
+                    $nilaiKapasitasRendah = 1;
+                } else {
+                    $nilaiKapasitasRendah = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
+                }
+                // nilai kapasitas tinggi
+                if ($nilaiKapasitas <= $kapasitasRendah) {
+                    $nilaiKapasitasTinggi = 0;
+                } else if ($nilaiKapasitas >= $kapasitasTinggi) {
+                    $nilaiKapasitasTinggi = 1;
+                } else {
+                    $nilaiKapasitasTinggi = ($nilaiKapasitas - $kapasitasRendah) / ($kapasitasTinggi - $kapasitasRendah);
+                }
+                // nilai rating rndah
+                if ($nilaiRating >= $ratingTinggi) {
+                    $nilaiRatingRendah = 0;
+                } elseif ($nilaiRating <= $ratingRendah) {
+                    $nilaiRatingRendah = 1;
+                } else {
+                    $nilaiRatingRendah = ($ratingTinggi - $nilaiRating) / ($ratingTinggi - $ratingRendah);
+                }
+
+                // nilai rating tinggi
+                if ($nilaiRating <= $ratingRendah) {
+                    $nilaiRatingTinggi = 0;
+                } else if ($nilaiRating >= $ratingTinggi) {
+                    $nilaiRatingTinggi = 1;
+                } else {
+                    $nilaiRatingTinggi = ($nilaiRating - $ratingRendah) / ($ratingTinggi - $ratingRendah);
+                }
+                $dataFuzzyfikasi = [
+                    'Persiapan Data ideal' => [
+                        'Kapasitas rendah' => $kapasitasRendah,
+                        'Kapasitas tinggi' => $kapasitasTinggi,
+                        'Rating rendah' => $ratingRendah,
+                        'Rating tinggi' => $ratingTinggi,
+                        'Nilai Ideal' => $nilaiIdeal,
+                        'Nilai Kurang Ideal' => $nilaiKurangIdeal,
+                    ],
+                    'Nilai Fuzzi' => [
+                        'Nilai kapasitas rendah' => $nilaiKapasitasRendah,
+                        'Nilai kapasitas tinggi' => $nilaiKapasitasTinggi,
+                        'Nilai rating rendah' => $nilaiRatingRendah,
+                        'Nilai rating tinggi' => $nilaiRatingTinggi,
+                    ]
+                ];
+                // 2. inferensiasi
+
+
+                $r1 = 0;
+                $r2 = 0;
+                $r3 = 0;
+                $r4 = 0;
+                $a1 = min($nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiRatingRendah); // maka kurang ideal
+                $r1 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a1;
+
+                $a2 = min($nilaiJarakRendah, $nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
+                $r2 = $a2 * ($nilaiIdeal - $nilaiKurangIdeal) + $nilaiKurangIdeal;
+
+                $a3 =  min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
+                $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
+                $a4 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
                 $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
 
                 $dataInferensiasi = [
