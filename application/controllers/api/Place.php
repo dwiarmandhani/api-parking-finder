@@ -778,25 +778,34 @@ class Place extends Auth
                     ],
                 ];
 
-                if ($finalResult <= 50) {
-                    $dataFuzzy['place_image'] = $place_image;
-                    $dataFuzzy['status'] = '';
-                    $dataFuzzy['Hasil Perhitungan'] = [
-                        $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
-                    ];
+                $dataFuzzy['place_image'] = $place_image;
+                $dataFuzzy['status'] = '';
+                $dataFuzzy['nilaiAkhir'] = $finalResult;
+                $dataFuzzy['Hasil Perhitungan'] = [
+                    $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
+                ];
 
-                    $dataForyou[] = $dataFuzzy;
-                } else {
-                    $dataFuzzy['place_image'] = $place_image;
-                    $dataFuzzy['status'] = 'Disarankan untuk Anda';
-                    $dataFuzzy['Hasil Perhitungan'] = [
-                        $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
-                    ];
-                    $dataForyou[] = $dataFuzzy;
+                $dataForyou[] = $dataFuzzy;
+            }
+
+            $totalFuzzy = 0;
+            foreach ($dataForyou as $item) {
+                // Mengakumulasi nilai jarak dari setiap elemen
+                $totalFuzzy += $item['nilaiAkhir'];
+            }
+            $jumlahData = count($dataForyou);
+            if ($jumlahData > 0) {
+                $rataRataFuzzy = $totalFuzzy / $jumlahData;
+
+                foreach ($dataForyou as &$item) {
+                    if ($item['nilaiAkhir'] > $rataRataFuzzy) {
+                        $item['status'] = 'Disarankan untuk Anda';
+                    } else {
+                        $item['status'] = '';
+                    }
                 }
             }
             $sorted_places = $this->place->sort_places_by_status_and_jarak($dataForyou);
-            // var_dump($dataForyou);
 
             $this->response([
                 'status' => true,
@@ -1012,23 +1021,31 @@ class Place extends Auth
                         'Hasil Defuzzyfikasi Total A / Total B' => $finalResult
                     ],
                 ];
-                // var_dump($dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi);
+                $dataFuzzy['place_image'] = $place_image;
+                $dataFuzzy['status'] = '';
+                $dataFuzzy['nilaiAkhir'] = $finalResult;
+                $dataFuzzy['Hasil Perhitungan'] = [
+                    $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
+                ];
 
-                if ($finalResult <= 50) {
-                    $dataFuzzy['place_image'] = $place_image;
-                    $dataFuzzy['status'] = '';
-                    $dataFuzzy['Hasil Perhitungan'] = [
-                        $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
-                    ];
+                $dataForyou[] = $dataFuzzy;
+            }
 
-                    $dataForyou[] = $dataFuzzy;
-                } else {
-                    $dataFuzzy['place_image'] = $place_image;
-                    $dataFuzzy['status'] = 'Disarankan untuk Anda';
-                    $dataFuzzy['Hasil Perhitungan'] = [
-                        $dataFuzzyfikasi, $dataInferensiasi, $dataDefuzzyfikasi
-                    ];
-                    $dataForyou[] = $dataFuzzy;
+            $totalFuzzy = 0;
+            foreach ($dataForyou as $item) {
+                // Mengakumulasi nilai jarak dari setiap elemen
+                $totalFuzzy += $item['nilaiAkhir'];
+            }
+            $jumlahData = count($dataForyou);
+            if ($jumlahData > 0) {
+                $rataRataFuzzy = $totalFuzzy / $jumlahData;
+
+                foreach ($dataForyou as &$item) {
+                    if ($item['nilaiAkhir'] > $rataRataFuzzy) {
+                        $item['status'] = 'Disarankan untuk Anda';
+                    } else {
+                        $item['status'] = '';
+                    }
                 }
             }
             $sorted_places = $this->place->sort_places_by_status_and_jarak($dataForyou);
