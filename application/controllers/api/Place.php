@@ -734,10 +734,10 @@ class Place extends Auth
                 $r1 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a1;
 
                 $a2 = min($nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
-                $r2 = $a2 * ($nilaiIdeal - $nilaiKurangIdeal) + $nilaiKurangIdeal;
+                $r2 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a2;
 
                 $a3 =  min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
-                $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
+                $r3 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a3;
                 $a4 = min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
                 $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
 
@@ -969,15 +969,14 @@ class Place extends Auth
                 $r6 = 0;
                 $r7 = 0;
                 $r8 = 0;
-
                 $a1 = min($nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiRatingRendah); // maka kurang ideal
                 $r1 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a1;
 
                 $a2 = min($nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
-                $r2 = $a2 * ($nilaiIdeal - $nilaiKurangIdeal) + $nilaiKurangIdeal;
+                $r2 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a2;
 
                 $a3 =  min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
-                $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
+                $r3 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a3;
                 $a4 = min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
                 $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
 
@@ -989,7 +988,6 @@ class Place extends Auth
                 $r7 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a7;
                 $a8 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingTinggi);
                 $r8 = ($nilaiIdeal - $nilaiKurangIdeal) * $a8 + $nilaiKurangIdeal;
-
                 $dataInferensiasi = [
                     'Nilai Inferensiasi' => [
                         'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
