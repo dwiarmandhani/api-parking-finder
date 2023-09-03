@@ -651,22 +651,42 @@ class Place extends Auth
                 $nilaiIdeal = 100;
                 $nilaiKurangIdeal = 50;
 
+                // //nilaiJarakRendah
+                // if ($nilaiJarak >= $JarakTinggi) {
+                //     $nilaiJarakRendah = 0;
+                // } else if ($nilaiJarak <= $JarakRendah) {
+                //     $nilaiJarakRendah = 1;
+                // } else {
+                //     $nilaiJarakRendah = ($JarakTinggi - $nilaiJarak) / ($JarakTinggi - $JarakRendah);
+                // }
+
+                // //nilaiJarakTinggi
+                // if ($nilaiJarak >= $JarakTinggi) {
+                //     $nilaiJarakTinggi = 1;
+                // } else if ($nilaiJarak <= $JarakRendah) {
+                //     $nilaiJarakTinggi = 0;
+                // } else {
+                //     $nilaiJarakTinggi = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
+                // }
                 //nilaiJarakRendah
                 if ($nilaiJarak >= $JarakTinggi) {
-                    $nilaiJarakRendah = 0;
-                } else if ($nilaiJarak <= $JarakRendah) {
                     $nilaiJarakRendah = 1;
+                } else if ($nilaiJarak <= $JarakRendah) {
+                    $nilaiJarakRendah = 0;
                 } else {
-                    $nilaiJarakRendah = ($JarakTinggi - $nilaiJarak) / ($JarakTinggi - $JarakRendah);
+                    // $nilaiJarakRendah = ($JarakTinggi - $nilaiJarak) / ($JarakTinggi - $JarakRendah);
+                    $nilaiJarakTinggi = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
                 }
 
                 //nilaiJarakTinggi
                 if ($nilaiJarak >= $JarakTinggi) {
-                    $nilaiJarakTinggi = 1;
-                } else if ($nilaiJarak <= $JarakRendah) {
                     $nilaiJarakTinggi = 0;
+                } else if ($nilaiJarak <= $JarakRendah) {
+                    $nilaiJarakTinggi = 1;
                 } else {
-                    $nilaiJarakTinggi = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
+                    $nilaiJarakRendah = ($JarakTinggi - $nilaiJarak) / ($JarakTinggi - $JarakRendah);
+
+                    // $nilaiJarakTinggi = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
                 }
                 // nilaiKapasitasRendah
                 if ($nilaiKapasitas >= $kapasitasTinggi) {
@@ -895,22 +915,42 @@ class Place extends Auth
                 $nilaiIdeal = 100;
                 $nilaiKurangIdeal = 50;
 
+                // //nilaiJarakRendah
+                // if ($nilaiJarak >= $JarakTinggi) {
+                //     $nilaiJarakRendah = 0;
+                // } else if ($nilaiJarak <= $JarakRendah) {
+                //     $nilaiJarakRendah = 1;
+                // } else {
+                //     $nilaiJarakRendah = ($JarakTinggi - $nilaiJarak) / ($JarakTinggi - $JarakRendah);
+                // }
+
+                // //nilaiJarakTinggi
+                // if ($nilaiJarak >= $JarakTinggi) {
+                //     $nilaiJarakTinggi = 1;
+                // } else if ($nilaiJarak <= $JarakRendah) {
+                //     $nilaiJarakTinggi = 0;
+                // } else {
+                //     $nilaiJarakTinggi = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
+                // }
                 //nilaiJarakRendah
                 if ($nilaiJarak >= $JarakTinggi) {
-                    $nilaiJarakRendah = 0;
-                } else if ($nilaiJarak <= $JarakRendah) {
                     $nilaiJarakRendah = 1;
+                } else if ($nilaiJarak <= $JarakRendah) {
+                    $nilaiJarakRendah = 0;
                 } else {
-                    $nilaiJarakRendah = ($JarakTinggi - $nilaiJarak) / ($JarakTinggi - $JarakRendah);
+                    // $nilaiJarakRendah = ($JarakTinggi - $nilaiJarak) / ($JarakTinggi - $JarakRendah);
+                    $nilaiJarakTinggi = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
                 }
 
                 //nilaiJarakTinggi
                 if ($nilaiJarak >= $JarakTinggi) {
-                    $nilaiJarakTinggi = 1;
-                } else if ($nilaiJarak <= $JarakRendah) {
                     $nilaiJarakTinggi = 0;
+                } else if ($nilaiJarak <= $JarakRendah) {
+                    $nilaiJarakTinggi = 1;
                 } else {
-                    $nilaiJarakTinggi = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
+                    $nilaiJarakRendah = ($JarakTinggi - $nilaiJarak) / ($JarakTinggi - $JarakRendah);
+
+                    // $nilaiJarakTinggi = ($nilaiJarak - $JarakRendah) / ($JarakTinggi - $JarakRendah);
                 }
 
                 // nilaiKapasitasRendah
