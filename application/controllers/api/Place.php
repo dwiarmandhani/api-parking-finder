@@ -617,6 +617,7 @@ class Place extends Auth
 
                 if ($distance <= $distance_threshold) {
                     $place['isRated'] = $like;
+                    // $place['jarak'] = $distance;
                     $place['jarak'] = round($distance, 2);
                     $filtered_places[] = $place;
                 }
@@ -725,30 +726,50 @@ class Place extends Auth
                 $r2 = 0;
                 $r3 = 0;
                 $r4 = 0;
+                $r5 = 0;
+                $r6 = 0;
+                $r7 = 0;
+                $r8 = 0;
                 $a1 = min($nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiRatingRendah); // maka kurang ideal
                 $r1 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a1;
 
-                $a2 = min($nilaiJarakRendah, $nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
+                $a2 = min($nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
                 $r2 = $a2 * ($nilaiIdeal - $nilaiKurangIdeal) + $nilaiKurangIdeal;
 
                 $a3 =  min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
                 $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
-                $a4 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
+                $a4 = min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
                 $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
 
-                // var_dump()
+                $a5 = min($nilaiJarakRendah, $nilaiKapasitasRendah, $nilaiRatingRendah);
+                $r5 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a5;
+                $a6 = min($nilaiJarakRendah, $nilaiKapasitasRendah, $nilaiRatingTinggi);
+                $r6 = ($nilaiIdeal - $nilaiKurangIdeal) * $a6 + $nilaiKurangIdeal;
+                $a7 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingRendah);
+                $r7 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a7;
+                $a8 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingTinggi);
+                $r8 = ($nilaiIdeal - $nilaiKurangIdeal) * $a8 + $nilaiKurangIdeal;
+
+                // var_dump($a1, $nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiJarakRendah);
+                // die;
 
                 $dataInferensiasi = [
                     'Nilai Inferensiasi' => [
                         'Nilai jarak tinggi: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
-                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a2) & maka nilai ideal (r2)' => $a2 . ' & ' . $r2,
-                        'Nilai kapasitas tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' (a3) & maka tidak ideal (r3)' => $a3 . ' & ' . $r3,
-                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a4) & maka nilai ideal (r4)' => $a4 . ' & ' . $r4,
+                        'Nilai jarak tinggi: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a2 . ' & ' . $r2,
+                        'Nilai jarak tinggi: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a3 . ' & ' . $r3,
+                        'Nilai jarak tinggi: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a4 . ' & ' . $r4,
+
+                        'Nilai jarak rendah: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
+                        'Nilai jarak rendah: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating Tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a2 . ' & ' . $r2,
+                        'Nilai jarak rendah: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a3 . ' & ' . $r3,
+                        'Nilai jarak rendah: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a4 . ' & ' . $r4,
+
                     ]
                 ];
                 /**defuzzyfikasi */
-                $totalA = ($a1 * $r1) + ($a2 * $r2) + ($a3 * $r3) + ($a4 * $r4);
-                $totalB = $a1 + $a2 + $a3 + $a4;
+                $totalA = ($a1 * $r1) + ($a2 * $r2) + ($a3 * $r3) + ($a4 * $r4) + ($a5 * $r5) + ($a6 * $r6) + ($a7 * $r7) + ($a8 * $r8);
+                $totalB = $a1 + $a2 + $a3 + $a4 + $a5 + $a6 + $a7 + $a8;
                 $finalResult = $totalA / $totalB;
                 $dataDefuzzyfikasi = [
                     'Data Defuzzyfikasi' => [
@@ -941,32 +962,52 @@ class Place extends Auth
                 ];
 
                 // 2. inferensiasi
-                // 2. inferensiasi
                 $r1 = 0;
                 $r2 = 0;
                 $r3 = 0;
                 $r4 = 0;
+                $r5 = 0;
+                $r6 = 0;
+                $r7 = 0;
+                $r8 = 0;
+
                 $a1 = min($nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiRatingRendah); // maka kurang ideal
                 $r1 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a1;
 
-                $a2 = min($nilaiJarakRendah, $nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
+                $a2 = min($nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiRatingTinggi); // maka ideal
                 $r2 = $a2 * ($nilaiIdeal - $nilaiKurangIdeal) + $nilaiKurangIdeal;
 
                 $a3 =  min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
                 $r3 = $nilaiIdeal - $a3 * ($nilaiIdeal - $nilaiKurangIdeal);
-                $a4 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
+                $a4 = min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
                 $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
+
+                $a5 = min($nilaiJarakRendah, $nilaiKapasitasRendah, $nilaiRatingRendah);
+                $r5 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a5;
+                $a6 = min($nilaiJarakRendah, $nilaiKapasitasRendah, $nilaiRatingTinggi);
+                $r6 = ($nilaiIdeal - $nilaiKurangIdeal) * $a6 + $nilaiKurangIdeal;
+                $a7 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingRendah);
+                $r7 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a7;
+                $a8 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingTinggi);
+                $r8 = ($nilaiIdeal - $nilaiKurangIdeal) * $a8 + $nilaiKurangIdeal;
+
                 $dataInferensiasi = [
                     'Nilai Inferensiasi' => [
                         'Nilai jarak tinggi: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
-                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a2) & maka nilai ideal (r2)' => $a2 . ' & ' . $r2,
-                        'Nilai kapasitas tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' (a3) & maka tidak ideal (r3)' => $a3 . ' & ' . $r3,
-                        'Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' (a4) & maka nilai ideal (r4)' => $a4 . ' & ' . $r4,
+                        'Nilai jarak tinggi: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a2 . ' & ' . $r2,
+                        'Nilai jarak tinggi: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a3 . ' & ' . $r3,
+                        'Nilai jarak tinggi: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a4 . ' & ' . $r4,
+
+                        'Nilai jarak rendah: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
+                        'Nilai jarak rendah: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating Tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a2 . ' & ' . $r2,
+                        'Nilai jarak rendah: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a3 . ' & ' . $r3,
+                        'Nilai jarak rendah: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a4 . ' & ' . $r4,
+
                     ]
                 ];
                 /**defuzzyfikasi */
-                $totalA = ($a1 * $r1) + ($a2 * $r2) + ($a3 * $r3) + ($a4 * $r4);
-                $totalB = $a1 + $a2 + $a3 + $a4;
+                $totalA = ($a1 * $r1) + ($a2 * $r2) + ($a3 * $r3) + ($a4 * $r4) + ($a5 * $r5) + ($a6 * $r6) + ($a7 * $r7) + ($a8 * $r8);
+                $totalB = $a1 + $a2 + $a3 + $a4 + $a5 + $a6 + $a7 + $a8;
                 $finalResult = $totalA / $totalB;
                 $dataDefuzzyfikasi = [
                     'Data Defuzzyfikasi' => [
