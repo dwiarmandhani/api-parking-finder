@@ -738,6 +738,10 @@ class Place extends Auth
 
                 $a3 =  min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingRendah); // maka tidak idela
                 $r3 = $nilaiIdeal - ($nilaiIdeal - $nilaiKurangIdeal) *  $a3;
+
+
+                var_dump($a3, $nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiJarakRendah);
+                die;
                 $a4 = min($nilaiJarakTinggi, $nilaiKapasitasTinggi, $nilaiRatingTinggi); // maka ideal
                 $r4 = ($nilaiIdeal - $nilaiKurangIdeal) * $a4 + $nilaiKurangIdeal;
 
@@ -750,8 +754,6 @@ class Place extends Auth
                 $a8 = min($nilaiJarakRendah, $nilaiKapasitasTinggi, $nilaiRatingTinggi);
                 $r8 = ($nilaiIdeal - $nilaiKurangIdeal) * $a8 + $nilaiKurangIdeal;
 
-                // var_dump($a1, $nilaiJarakTinggi, $nilaiKapasitasRendah, $nilaiJarakRendah);
-                // die;
 
                 $dataInferensiasi = [
                     'Nilai Inferensiasi' => [
