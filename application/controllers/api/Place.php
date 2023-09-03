@@ -756,14 +756,13 @@ class Place extends Auth
                 $dataInferensiasi = [
                     'Nilai Inferensiasi' => [
                         'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
-                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a2 . ' & ' . $r2,
-                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a3 . ' & ' . $r3,
-                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a4 . ' & ' . $r4,
-
-                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a5 . ' & ' . $r5,
-                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating Tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a6 . ' & ' . $r6,
-                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a7 . ' & ' . $r7,
-                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a8 . ' & ' . $r8,
+                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a2) & maka nilai kurang ideal (r2)' => $a2 . ' & ' . $r2,
+                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a3) & maka nilai kurang ideal (r3)' => $a3 . ' & ' . $r3,
+                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a4) & maka nilai kurang ideal (r4)' => $a4 . ' & ' . $r4,
+                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a5) & maka nilai kurang ideal (r5)' => $a5 . ' & ' . $r5,
+                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating Tinggi: ' . $nilaiRatingTinggi . ' = (a6) & maka nilai kurang ideal (r6)' => $a6 . ' & ' . $r6,
+                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a7) & maka nilai kurang ideal (r7)' => $a7 . ' & ' . $r7,
+                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a8) & maka nilai kurang ideal (r8)' => $a8 . ' & ' . $r8,
 
                     ]
                 ];
@@ -994,14 +993,13 @@ class Place extends Auth
                 $dataInferensiasi = [
                     'Nilai Inferensiasi' => [
                         'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a1 . ' & ' . $r1,
-                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a2 . ' & ' . $r2,
-                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a3 . ' & ' . $r3,
-                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a4 . ' & ' . $r4,
-
-                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a5 . ' & ' . $r5,
-                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating Tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a6 . ' & ' . $r6,
-                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a1) & maka nilai kurang ideal (r1)' => $a7 . ' & ' . $r7,
-                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a1) & maka nilai kurang ideal (r1)' => $a8 . ' & ' . $r8,
+                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a2) & maka nilai kurang ideal (r2)' => $a2 . ' & ' . $r2,
+                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a3) & maka nilai kurang ideal (r3)' => $a3 . ' & ' . $r3,
+                        'Nilai jarak jauh: ' . $nilaiJarakTinggi . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a4) & maka nilai kurang ideal (r4)' => $a4 . ' & ' . $r4,
+                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a5) & maka nilai kurang ideal (r5)' => $a5 . ' & ' . $r5,
+                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas rendah: ' . $nilaiKapasitasRendah . ' dan nilai rating Tinggi: ' . $nilaiRatingTinggi . ' = (a6) & maka nilai kurang ideal (r6)' => $a6 . ' & ' . $r6,
+                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating rendah: ' . $nilaiRatingRendah . ' = (a7) & maka nilai kurang ideal (r7)' => $a7 . ' & ' . $r7,
+                        'Nilai jarak dekat: ' . $nilaiJarakRendah . ', Nilai kapasitas Tinggi: ' . $nilaiKapasitasTinggi . ' dan nilai rating tinggi: ' . $nilaiRatingTinggi . ' = (a8) & maka nilai kurang ideal (r8)' => $a8 . ' & ' . $r8,
 
                     ]
                 ];
