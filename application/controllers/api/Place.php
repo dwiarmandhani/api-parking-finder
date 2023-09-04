@@ -800,8 +800,10 @@ class Place extends Auth
                 foreach ($dataForyou as &$item) {
                     if ($item['nilaiAkhir'] > $rataRataFuzzy) {
                         $item['status'] = 'Disarankan untuk Anda';
+                        $item['niraiAkhirRataRata'] = $rataRataFuzzy;
                     } else {
                         $item['status'] = '';
+                        $item['niraiAkhirRataRata'] = $rataRataFuzzy;
                     }
                 }
             }
@@ -1043,8 +1045,10 @@ class Place extends Auth
                 foreach ($dataForyou as &$item) {
                     if ($item['nilaiAkhir'] > $rataRataFuzzy) {
                         $item['status'] = 'Disarankan untuk Anda';
+                        $item['niraiAkhirRataRata'] = $rataRataFuzzy;
                     } else {
                         $item['status'] = '';
+                        $item['niraiAkhirRataRata'] = $rataRataFuzzy;
                     }
                 }
             }
